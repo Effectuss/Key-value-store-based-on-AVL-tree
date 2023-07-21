@@ -1,11 +1,23 @@
 #ifndef __SELF_BALANCING_BINARY_SEARCH_TREE_H__
 #define __SELF_BALANCING_BINARY_SEARCH_TREE_H__
 
+#include <cstddef>
 #include <memory>
 
 #include "abstract_store.h"
 
 class SelfBalancingBinarySearchTree : public AbstractStore {
+ private:
+  struct AVLNode {
+    AVLNode(const Key& k, const Value& v)
+        : key(k), value(v), left(nullptr), right(nullptr), height(1){};
+    AbstractStore::Key key;
+    Value value;
+    std::unique_ptr<AVLNode> left;
+    std::unique_ptr<AVLNode> right;
+    int height;
+  };
+
  public:
   bool Set(const Key& key, const Value& value) override;
   std::optional<Value> Get(const Key& key) const override;
@@ -21,13 +33,8 @@ class SelfBalancingBinarySearchTree : public AbstractStore {
   std::size_t Export(const std::string& file_name) const override;
 
  private:
-  struct AVLNode {
-    AbstractStore::Key key;
-    Value value;
-    std::unique_ptr<AVLNode> left;
-    std::unique_ptr<AVLNode> right;
-    int height = 0;
-  };
+  bool FindNode(const std::unique_ptr<AVLNode>& node, const Key& key) const;
+
   std::unique_ptr<AVLNode> root_;
 };
 
