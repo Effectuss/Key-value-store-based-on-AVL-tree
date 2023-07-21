@@ -6,18 +6,17 @@
 
 #include "abstract_store.h"
 
-class SelfBalancingBinarySearchTree : public AbstractStore {
- private:
-  struct AVLNode {
-    AVLNode(const Key& k, const Value& v)
-        : key(k), value(v), left(nullptr), right(nullptr), height(1){};
-    AbstractStore::Key key;
-    Value value;
-    std::unique_ptr<AVLNode> left;
-    std::unique_ptr<AVLNode> right;
-    int height;
-  };
+struct AVLNode {
+  AVLNode(const AbstractStore::Key& k, const Value& v)
+      : key(k), value(v), left(nullptr), right(nullptr), height(1){};
+  AbstractStore::Key key;
+  Value value;
+  std::unique_ptr<AVLNode> left;
+  std::unique_ptr<AVLNode> right;
+  int height;
+};
 
+class SelfBalancingBinarySearchTree : public AbstractStore {
  public:
   bool Set(const Key& key, const Value& value) override;
   // std::optional<Value> Get(const Key& key) const override;
@@ -33,8 +32,8 @@ class SelfBalancingBinarySearchTree : public AbstractStore {
   // std::size_t Export(const std::string& file_name) const override;
 
   const std::unique_ptr<AVLNode>& GetRoot() const;
-  std::vector<AVLNode> InOrderTraversal(
-      const std::unique_ptr<AVLNode>& node) const;
+  void InOrderTraversal(const std::unique_ptr<AVLNode>& node,
+                        std::vector<Key>& vec_keys) const;
 
  private:
   bool FindNode(const std::unique_ptr<AVLNode>& node, const Key& key) const;

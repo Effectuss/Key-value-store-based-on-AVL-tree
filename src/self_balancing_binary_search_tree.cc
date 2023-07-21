@@ -15,6 +15,7 @@ bool SelfBalancingBinarySearchTree::Exists(const Key& key) const {
 
 bool SelfBalancingBinarySearchTree::Del(const Key& key) {
   if (!FindNode(std::move(root_), key)) return false;
+  return true;
 }
 
 // bool SelfBalancingBinarySearchTree::Update(const Key& key,
@@ -51,9 +52,9 @@ bool SelfBalancingBinarySearchTree::FindNode(
   }
 }
 
-void SelfBalancingBinarySearchTree::InsertHelper(
-    std::unique_ptr<SelfBalancingBinarySearchTree::AVLNode>& node,
-    const Key& key, const Value& value) {
+void SelfBalancingBinarySearchTree::InsertHelper(std::unique_ptr<AVLNode>& node,
+                                                 const Key& key,
+                                                 const Value& value) {
   if (node == nullptr) {
     node = std::make_unique<AVLNode>(key, value);
     return;
@@ -65,18 +66,14 @@ void SelfBalancingBinarySearchTree::InsertHelper(
   }
 }
 
-std::vector<SelfBalancingBinarySearchTree::AVLNode>
-SelfBalancingBinarySearchTree::InOrderTraversal(
-    const std::unique_ptr<AVLNode>& node) const {
-  std::vector<AVLNode> nodes;
-  if (root_ == nullptr) return nodes;
-  InOrderTraversal(node->left);
-  nodes.push_back(*node);
-  InOrderTraversal(node->right);
-  return nodes;
+void SelfBalancingBinarySearchTree::InOrderTraversal(
+    const std::unique_ptr<AVLNode>& node, std::vector<Key>& vec_keys) const {
+  if (node == nullptr) return;
+  InOrderTraversal(node->left, vec_keys);
+  vec_keys.push_back(node->key);
+  InOrderTraversal(node->right, vec_keys);
 }
 
-const std::unique_ptr<SelfBalancingBinarySearchTree::AVLNode>&
-SelfBalancingBinarySearchTree::GetRoot() const {
+const std::unique_ptr<AVLNode>& SelfBalancingBinarySearchTree::GetRoot() const {
   return root_;
 }
