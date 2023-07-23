@@ -79,12 +79,21 @@ void SelfBalancingBinarySearchTree::InsertHelper(std::unique_ptr<AVLNode>& node,
   }
 }
 
-void SelfBalancingBinarySearchTree::InOrderTraversal(
+void SelfBalancingBinarySearchTree::InOrderTraversalKeys(
     const std::unique_ptr<AVLNode>& node, std::vector<Key>& vec_keys) const {
   if (node == nullptr) return;
-  InOrderTraversal(node->left, vec_keys);
+  InOrderTraversalKeys(node->left, vec_keys);
   vec_keys.push_back(node->key);
-  InOrderTraversal(node->right, vec_keys);
+  InOrderTraversalKeys(node->right, vec_keys);
+}
+
+void SelfBalancingBinarySearchTree::InOrderTraversalValues(
+    const std::unique_ptr<AVLNode>& node,
+    std::vector<Value>& vec_values) const {
+  if (node == nullptr) return;
+  InOrderTraversalValues(node->left, vec_values);
+  vec_values.push_back(node->value);
+  InOrderTraversalValues(node->right, vec_values);
 }
 
 const std::unique_ptr<AVLNode>& SelfBalancingBinarySearchTree::GetRoot() const {
@@ -93,17 +102,21 @@ const std::unique_ptr<AVLNode>& SelfBalancingBinarySearchTree::GetRoot() const {
 
 std::vector<AbstractStore::Key> SelfBalancingBinarySearchTree::Keys() const {
   std::vector<AbstractStore::Key> vec_keys;
-  InOrderTraversal(root_, vec_keys);
+  InOrderTraversalKeys(root_, vec_keys);
   return vec_keys;
 }
 
-std::vector<Value> SelfBalancingBinarySearchTree::ShowAll() const {}
+std::vector<Value> SelfBalancingBinarySearchTree::ShowAll() const {
+  std::vector<Value> vec_values;
+  InOrderTraversalValues(root_, vec_values);
+  return vec_values;
+}
 
-// bool SelfBalancingBinarySearchTree::Update(const Key& key,
-//                                            const std::string& value) {}
+bool SelfBalancingBinarySearchTree::Update(const Key& key,
+                                           const std::string& value) {}
 
-// bool SelfBalancingBinarySearchTree::Rename(const Key& old_key,
-//                                            const Key& new_key) {}
+bool SelfBalancingBinarySearchTree::Rename(const Key& old_key,
+                                           const Key& new_key) {}
 
 // std::optional<std::size_t> SelfBalancingBinarySearchTree::TTL(
 //     const Key& key) const {}

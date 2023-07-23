@@ -26,8 +26,9 @@ class AbstractStore {
   virtual bool Del(const Key& key) = 0;
   virtual std::vector<Key> Keys() const = 0;
   virtual std::vector<Value> ShowAll() const = 0;
-  // virtual bool Update(const Key& key, const std::string& value) = 0;
-  // virtual bool Rename(const Key& old_key, const Key& new_key) = 0;
+  virtual bool Update(const Key& key, const std::string& value) = 0;
+  virtual bool Rename(const Key& old_key, const Key& new_key) = 0;
+
   // virtual std::optional<std::size_t> TTL(const Key& key) const = 0;
   // virtual std::vector<Key> Find(const std::string& value) const = 0;
   // virtual std::size_t Upload(const std::string& file_name) = 0;
