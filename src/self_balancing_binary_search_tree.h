@@ -23,11 +23,11 @@ class SelfBalancingBinarySearchTree : public AbstractStore {
   bool Del(const Key& key) override;
   std::optional<Value> Get(const Key& key) const override;
   std::vector<Key> Keys() const override;
+  std::vector<Value> ShowAll() const override;
   // bool Update(const Key& key, const std::string& value) override;
   // bool Rename(const Key& old_key, const Key& new_key) override;
   // std::optional<std::size_t> TTL(const Key& key) const override;
   // std::vector<Key> Find(const std::string& value) const override;
-  // std::vector<Value> ShowAll() const override;
   // std::size_t Upload(const std::string& file_name) override;
   // std::size_t Export(const std::string& file_name) const override;
 
@@ -40,6 +40,10 @@ class SelfBalancingBinarySearchTree : public AbstractStore {
                                 const Key& key) const;
   void InOrderTraversal(const std::unique_ptr<AVLNode>& node,
                         std::vector<AbstractStore::Key>& vec_keys) const;
+  std::unique_ptr<AVLNode> DeletHelper(std::unique_ptr<AVLNode> node,
+                                       const Key& key);
+  std::unique_ptr<AVLNode> FindMin(std::unique_ptr<AVLNode> node);
+  std::unique_ptr<AVLNode> FindMax(std::unique_ptr<AVLNode> node);
 
   std::unique_ptr<AVLNode> root_;
 };

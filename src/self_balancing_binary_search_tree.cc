@@ -18,8 +18,40 @@ bool SelfBalancingBinarySearchTree::Exists(const Key& key) const {
 
 bool SelfBalancingBinarySearchTree::Del(const Key& key) {
   if (!FindNode(std::move(root_), key).has_value()) return false;
-  
-  return true;
+  root_ = DeletHelper(std::move(root_), key);
+  return root_ != nullptr;
+}
+
+std::unique_ptr<AVLNode> SelfBalancingBinarySearchTree::FindMin(
+    std::unique_ptr<AVLNode> node) {
+  while (node->left != nullptr) node = std::move(node->left);
+  return node;
+}
+
+std::unique_ptr<AVLNode> SelfBalancingBinarySearchTree::FindMax(
+    std::unique_ptr<AVLNode> node) {
+  while (node->right != nullptr) node = std::move(node->right);
+  return node;
+}
+std::unique_ptr<AVLNode> SelfBalancingBinarySearchTree::DeletHelper(
+    std::unique_ptr<AVLNode> node, const Key& key) {
+  if (node == nullptr) return nullptr;
+  if (key < node->key) {
+    node->left = DeletHelper(std::move(node->left), key);
+  } else if (key > node->key) {
+    node->right = DeletHelper(std::move(node->right), key);
+  } else {
+    if (node->left == nullptr || node->right == nullptr) {
+      node = (node->left == nullptr) ? std::move(node->right)
+                                     : std::move(node->left);
+    } else {
+      std::unique_ptr<AVLNode> max_node = FindMax(std::move(node->left));
+      node->key = max_node->key;
+      node->value = max_node->value;
+      node->right = DeletHelper(std::move(node->right), max_node->key);
+    }
+  }
+  return node;
 }
 
 std::optional<Value> SelfBalancingBinarySearchTree::FindNode(
@@ -65,6 +97,8 @@ std::vector<AbstractStore::Key> SelfBalancingBinarySearchTree::Keys() const {
   return vec_keys;
 }
 
+std::vector<Value> SelfBalancingBinarySearchTree::ShowAll() const {}
+
 // bool SelfBalancingBinarySearchTree::Update(const Key& key,
 //                                            const std::string& value) {}
 
@@ -76,8 +110,6 @@ std::vector<AbstractStore::Key> SelfBalancingBinarySearchTree::Keys() const {
 
 // std::vector<AbstractStore::Key> SelfBalancingBinarySearchTree::Find(
 //     const std::string& value) const {}
-
-// std::vector<Value> SelfBalancingBinarySearchTree::ShowAll() const {}
 
 // std::size_t SelfBalancingBinarySearchTree::Upload(
 //     const std::string& file_name) {}
