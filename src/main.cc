@@ -11,12 +11,18 @@ int main() {
   std::cout << avl_tre.Set("key0", value) << std::endl;
   std::cout << avl_tre.Exists("key1") << std::endl;
   std::cout << avl_tre.Exists("key3") << std::endl;
-  std::vector<AbstractStore::Key> nodes;
-  avl_tre.InOrderTraversal(avl_tre.GetRoot(), nodes);
+  std::vector<AbstractStore::Key> nodes = avl_tre.Keys();
 
   for (const auto& node : nodes) {
     std::cout << node << " ";
   }
-
+  std::cout << std::endl;
+  auto res = avl_tre.Get("key");
+  if (res.has_value()) {
+    auto str_res = res.value().ToString();
+    std::cout << str_res;
+  } else {
+    std::cout << "Null";
+  }
   return 0;
 }

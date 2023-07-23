@@ -19,11 +19,11 @@ struct AVLNode {
 class SelfBalancingBinarySearchTree : public AbstractStore {
  public:
   bool Set(const Key& key, const Value& value) override;
-  // std::optional<Value> Get(const Key& key) const override;
   bool Exists(const Key& key) const override;
   bool Del(const Key& key) override;
+  std::optional<Value> Get(const Key& key) const override;
+  std::vector<Key> Keys() const override;
   // bool Update(const Key& key, const std::string& value) override;
-  // std::vector<Key> Keys() const override;
   // bool Rename(const Key& old_key, const Key& new_key) override;
   // std::optional<std::size_t> TTL(const Key& key) const override;
   // std::vector<Key> Find(const std::string& value) const override;
@@ -32,13 +32,14 @@ class SelfBalancingBinarySearchTree : public AbstractStore {
   // std::size_t Export(const std::string& file_name) const override;
 
   const std::unique_ptr<AVLNode>& GetRoot() const;
-  void InOrderTraversal(const std::unique_ptr<AVLNode>& node,
-                        std::vector<Key>& vec_keys) const;
 
  private:
-  bool FindNode(const std::unique_ptr<AVLNode>& node, const Key& key) const;
   void InsertHelper(std::unique_ptr<AVLNode>& node, const Key& key,
                     const Value& value);
+  std::optional<Value> FindNode(const std::unique_ptr<AVLNode>& node,
+                                const Key& key) const;
+  void InOrderTraversal(const std::unique_ptr<AVLNode>& node,
+                        std::vector<AbstractStore::Key>& vec_keys) const;
 
   std::unique_ptr<AVLNode> root_;
 };
