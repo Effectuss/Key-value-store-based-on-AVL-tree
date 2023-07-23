@@ -24,7 +24,6 @@ class SelfBalancingBinarySearchTree : public AbstractStore {
   std::optional<Value> Get(const Key& key) const override;
   std::vector<Key> Keys() const override;
   std::vector<Value> ShowAll() const override;
-
   bool Update(const Key& key, const std::string& value) override;
   bool Rename(const Key& old_key, const Key& new_key) override;
 
@@ -38,8 +37,10 @@ class SelfBalancingBinarySearchTree : public AbstractStore {
  private:
   void InsertHelper(std::unique_ptr<AVLNode>& node, const Key& key,
                     const Value& value);
-  std::optional<Value> FindNode(const std::unique_ptr<AVLNode>& node,
-                                const Key& key) const;
+  // std::optional<Value> FindNode(const std::unique_ptr<AVLNode>& node,
+  //                               const Key& key) const;
+  std::optional<AVLNode*> FindNode(const std::unique_ptr<AVLNode>& node,
+                                   const Key& key) const;
   void InOrderTraversalKeys(const std::unique_ptr<AVLNode>& node,
                             std::vector<AbstractStore::Key>& vec_keys) const;
   void InOrderTraversalValues(const std::unique_ptr<AVLNode>& node,

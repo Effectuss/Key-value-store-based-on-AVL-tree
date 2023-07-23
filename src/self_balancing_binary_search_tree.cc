@@ -1,14 +1,15 @@
 #include "self_balancing_binary_search_tree.h"
 
+#include <iostream>
 bool SelfBalancingBinarySearchTree::Set(const Key& key, const Value& value) {
-  if (FindNode(std::move(root_), key).has_value()) return false;
+  if (FindNode(root_, key).has_value()) return false;
   InsertHelper(root_, key, value);
   return true;
 }
 
 std::optional<Value> SelfBalancingBinarySearchTree::Get(const Key& key) const {
-  auto result = FindNode(std::move(root_), key);
-  if (result.has_value()) return result.value();
+  auto result = FindNode(root_, key);
+  if (result.has_value()) return result.value()->value;
   return std::nullopt;
 }
 
@@ -17,7 +18,7 @@ bool SelfBalancingBinarySearchTree::Exists(const Key& key) const {
 }
 
 bool SelfBalancingBinarySearchTree::Del(const Key& key) {
-  if (!FindNode(std::move(root_), key).has_value()) return false;
+  if (!FindNode(root_, key).has_value()) return false;
   root_ = DeletHelper(std::move(root_), key);
   return root_ != nullptr;
 }
@@ -54,17 +55,16 @@ std::unique_ptr<AVLNode> SelfBalancingBinarySearchTree::DeletHelper(
   return node;
 }
 
-std::optional<Value> SelfBalancingBinarySearchTree::FindNode(
+std::optional<AVLNode*> SelfBalancingBinarySearchTree::FindNode(
     const std::unique_ptr<AVLNode>& node, const Key& key) const {
   if (node == nullptr) return std::nullopt;
-  if (node->key == key) return node->value;
+  if (node->key == key) return node.get();
   if (node->key > key) {
     return FindNode(node->left, key);
   } else {
     return FindNode(node->right, key);
   }
 }
-
 void SelfBalancingBinarySearchTree::InsertHelper(std::unique_ptr<AVLNode>& node,
                                                  const Key& key,
                                                  const Value& value) {
@@ -113,10 +113,20 @@ std::vector<Value> SelfBalancingBinarySearchTree::ShowAll() const {
 }
 
 bool SelfBalancingBinarySearchTree::Update(const Key& key,
-                                           const std::string& value) {}
+                                           const std::string& value) {
+  auto node = FindNode(root_, key);
+  if (!node.has_value()) return false;
+  node.value()->value.Update(value);
+  return true;
+}
 
 bool SelfBalancingBinarySearchTree::Rename(const Key& old_key,
-                                           const Key& new_key) {}
+                                           const Key& new_key) {
+  auto node = FindNode(root_, old_key);
+  if (!node.has_value()) return false;
+  node.value()->key = new_key;
+  return true;
+}
 
 // std::optional<std::size_t> SelfBalancingBinarySearchTree::TTL(
 //     const Key& key) const {}
