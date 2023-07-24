@@ -159,8 +159,22 @@ std::size_t SelfBalancingBinarySearchTree::Export(
   return count_keys;
 }
 
-// std::optional<std::size_t> SelfBalancingBinarySearchTree::TTL(
-//     const Key& key) const {}
+std::optional<std::size_t> SelfBalancingBinarySearchTree::TTL(
+    const Key& key) const {
+  auto node = FindNode(root_, key);
+  if (!node.has_value()) return std::nullopt;
+  return node.value()->value.TTL();
+}
 
-// std::vector<AbstractStore::Key> SelfBalancingBinarySearchTree::Find(
-//     const std::string& value) const {}
+std::vector<AbstractStore::Key> SelfBalancingBinarySearchTree::Find(
+    const std::string& value) const {
+  std::vector<Key> result_match;
+  std::vector<Key> keys = Keys();
+  std::vector<Value> value_storage = ShowAll();
+  for (int i = 0; i < keys.size(); ++i) {
+    if (value_storage[i].Match(value)) {
+      result_match.push_back(keys[i]);
+    }
+  }
+  return result_match;
+}

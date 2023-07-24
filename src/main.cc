@@ -4,7 +4,7 @@
 int main() {
   SelfBalancingBinarySearchTree avl_tre;
   Value value("Vasya", "Pupkin", "1992", "Moskow", "23");
-  Value value1("Petya", "Popov", "1998", "NSK", "11");
+  Value value1("Petya", "Popov", "1998", "Novosibirsk", "11");
   Value value3("Sidorov", "Sergei", "1980", "Novosibirsk", "50");
   avl_tre.Set("key0", value3);
   avl_tre.Set("key3", value1);
@@ -51,6 +51,10 @@ int main() {
   // for (const auto& node : nodes1) {
   //   std::cout << node << " ";
   // }
-  avl_tre.Export("omg.dat");
+  // avl_tre.Export("omg.dat");
+  auto res = avl_tre.Find("- - - Novosibirsk -");
+  for (const auto& el : res) {
+    std::cout << el << std::endl;
+  }
   return 0;
 }
