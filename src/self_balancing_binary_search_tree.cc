@@ -130,9 +130,7 @@ bool SelfBalancingBinarySearchTree::Rename(const Key& old_key,
 std::size_t SelfBalancingBinarySearchTree::Upload(
     const std::string& file_name) {
   std::ifstream file(file_name);
-  if (!file.is_open()) {
-    throw std::invalid_argument("File cant be opened");
-  }
+  if (!file.is_open()) throw std::invalid_argument("File can't be opened");
   Key read_key;
   std::string read_value;
   std::size_t count = 0;

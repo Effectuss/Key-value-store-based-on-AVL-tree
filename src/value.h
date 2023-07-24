@@ -3,6 +3,7 @@
 
 #include <chrono>
 #include <iomanip>
+#include <iostream>
 #include <optional>
 #include <sstream>
 #include <string>
@@ -19,16 +20,20 @@
 class Value {
  public:
   // при валидации номера если будет буква он ее не прочитает а цифры прочитает
+  // если в файле будет введен только ключ, то к нам в бд добавиться пустой
+  // пользователь ну только с ключем
+  // можно ввести отрицаительную дату
+  enum TypeValidation { kDate, kCoin, kTTL };
   Value() = default;
   Value(std::string last_name, std::string first_name, std::string birth_year,
         std::string city, std::string coins,
         std::optional<std::string> ttl = std::nullopt)
       : last_name_(std::move(last_name)),
         first_name_(std::move(first_name)),
-        birth_year_(ValidateNumber(birth_year)),
+        birth_year_(ValidateNumber(birth_year, TypeValidation::kDate)),
         city_(std::move(city)),
-        coins_(ValidateNumber(coins)),
-        ttl_(ttl ? ValidateNumber(*ttl) : ttl),
+        coins_(ValidateNumber(coins, TypeValidation::kCoin)),
+        ttl_(ttl ? ValidateNumber(*ttl, TypeValidation::kTTL) : ttl),
         creation_time_(std::chrono::system_clock::now()) {}
 
   void Update(const std::string &value) {
@@ -38,10 +43,11 @@ class Value {
 
     if (last_name != "-") last_name_ = last_name;
     if (first_name != "-") first_name_ = first_name;
-    if (birth_year != "-") birth_year_ = ValidateNumber(birth_year);
+    if (birth_year != "-") birth_year_ = ValidateNumber(birth_year, kDate);
     if (city != "-") city_ = city;
-    if (coins != "-") coins_ = ValidateNumber(coins);
-    if (ttl.has_value() and ttl.value() != "-") ttl_ = ValidateNumber(*ttl);
+    if (coins != "-") coins_ = ValidateNumber(coins, TypeValidation::kCoin);
+    if (ttl.has_value() and ttl.value() != "-")
+      ttl_ = ValidateNumber(*ttl, TypeValidation::kTTL);
   }
 
   std::optional<std::size_t> TTL() const {
@@ -93,9 +99,10 @@ class Value {
         ParseValueFields(ss);
     return (last_name == "-" or last_name == last_name_) and
            (first_name == "-" or first_name == first_name_) and
-           (birth_year == "-" or ValidateNumber(birth_year) == birth_year_) and
+           (birth_year == "-" or
+            ValidateNumber(birth_year, kDate) == birth_year_) and
            (city == "-" or city == city_) and
-           (coins == "-" or ValidateNumber(coins) == coins_);
+           (coins == "-" or ValidateNumber(coins, kCoin) == coins_);
   }
 
   bool operator==(const Value &other) const {
@@ -113,13 +120,24 @@ class Value {
     return elapsed_seconds.count();
   }
 
-  static std::string ValidateNumber(const std::string &input) {
+  static std::string ValidateNumber(const std::string &input,
+                                    const TypeValidation &type) {
     try {
-      auto value = std::stoull(input);
+      auto value = std::stoi(input);
+      if (type == TypeValidation::kDate and
+          (std::to_string(value).length() != 4 || value < 0)) {
+        throw std::invalid_argument(
+            "ERROR: invalid input format for date, value is " + input);
+      } else if (type == TypeValidation::kCoin and value < 0) {
+        throw std::invalid_argument(
+            "ERROR: invalid input format for coins, value is " + input);
+      } else if (type == TypeValidation::kTTL and value < 0) {
+        throw std::invalid_argument(
+            "ERROR: invalid input format for TTL, value is " + input);
+      }
       return std::to_string(value);
-    } catch (const std::exception &) {
-      throw std::invalid_argument("ERROR: unable to cast value \"" + input +
-                                  "\" to type int");
+    } catch (const std::exception &e) {
+      throw std::invalid_argument(e.what());
     }
   }
 
