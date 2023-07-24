@@ -23,19 +23,20 @@ bool SelfBalancingBinarySearchTree::Del(const Key& key) {
   return root_ != nullptr;
 }
 
-std::unique_ptr<AVLNode> SelfBalancingBinarySearchTree::FindMin(
-    std::unique_ptr<AVLNode> node) {
+std::unique_ptr<SelfBalancingBinarySearchTree::AVLNode>
+SelfBalancingBinarySearchTree::FindMin(std::unique_ptr<AVLNode> node) {
   while (node->left != nullptr) node = std::move(node->left);
   return node;
 }
 
-std::unique_ptr<AVLNode> SelfBalancingBinarySearchTree::FindMax(
-    std::unique_ptr<AVLNode> node) {
+std::unique_ptr<SelfBalancingBinarySearchTree::AVLNode>
+SelfBalancingBinarySearchTree::FindMax(std::unique_ptr<AVLNode> node) {
   while (node->right != nullptr) node = std::move(node->right);
   return node;
 }
-std::unique_ptr<AVLNode> SelfBalancingBinarySearchTree::DeletHelper(
-    std::unique_ptr<AVLNode> node, const Key& key) {
+std::unique_ptr<SelfBalancingBinarySearchTree::AVLNode>
+SelfBalancingBinarySearchTree::DeletHelper(std::unique_ptr<AVLNode> node,
+                                           const Key& key) {
   if (node == nullptr) return nullptr;
   if (key < node->key) {
     node->left = DeletHelper(std::move(node->left), key);
@@ -55,8 +56,9 @@ std::unique_ptr<AVLNode> SelfBalancingBinarySearchTree::DeletHelper(
   return node;
 }
 
-std::optional<AVLNode*> SelfBalancingBinarySearchTree::FindNode(
-    const std::unique_ptr<AVLNode>& node, const Key& key) const {
+std::optional<SelfBalancingBinarySearchTree::AVLNode*>
+SelfBalancingBinarySearchTree::FindNode(const std::unique_ptr<AVLNode>& node,
+                                        const Key& key) const {
   if (node == nullptr) return std::nullopt;
   if (node->key == key) return node.get();
   if (node->key > key) {
@@ -96,10 +98,6 @@ void SelfBalancingBinarySearchTree::InOrderTraversalValues(
   InOrderTraversalValues(node->right, vec_values);
 }
 
-const std::unique_ptr<AVLNode>& SelfBalancingBinarySearchTree::GetRoot() const {
-  return root_;
-}
-
 std::vector<AbstractStore::Key> SelfBalancingBinarySearchTree::Keys() const {
   std::vector<AbstractStore::Key> vec_keys;
   InOrderTraversalKeys(root_, vec_keys);
@@ -113,10 +111,10 @@ std::vector<Value> SelfBalancingBinarySearchTree::ShowAll() const {
 }
 
 bool SelfBalancingBinarySearchTree::Update(const Key& key,
-                                           const std::string& value) {
+                                           const std::string& new_value) {
   auto node = FindNode(root_, key);
   if (!node.has_value()) return false;
-  node.value()->value.Update(value);
+  node.value()->value.Update(new_value);
   return true;
 }
 
@@ -124,18 +122,18 @@ bool SelfBalancingBinarySearchTree::Rename(const Key& old_key,
                                            const Key& new_key) {
   auto node = FindNode(root_, old_key);
   if (!node.has_value()) return false;
-  node.value()->key = new_key;
+  Del(node.value()->key);
+  Set(new_key, node.value()->value);
   return true;
 }
+std::size_t SelfBalancingBinarySearchTree::Upload(
+    const std::string& file_name) {}
+
+std::size_t SelfBalancingBinarySearchTree::Export(
+    const std::string& file_name) const {}
 
 // std::optional<std::size_t> SelfBalancingBinarySearchTree::TTL(
 //     const Key& key) const {}
 
 // std::vector<AbstractStore::Key> SelfBalancingBinarySearchTree::Find(
 //     const std::string& value) const {}
-
-// std::size_t SelfBalancingBinarySearchTree::Upload(
-//     const std::string& file_name) {}
-
-// std::size_t SelfBalancingBinarySearchTree::Export(
-//     const std::string& file_name) const {}
