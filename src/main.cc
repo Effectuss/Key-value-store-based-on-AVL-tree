@@ -41,15 +41,16 @@ int main() {
 
   avl_tre.Upload("test.dat");
 
-  auto value_vec1 = avl_tre.ShowAll();
-  for (const auto& el : value_vec1) {
-    std::cout << el.ToString() << std::endl;
-  }
-  std::cout << "\n\n";
-  std::vector<AbstractStore::Key> nodes1 = avl_tre.Keys();
-  std::cout << "\n\n";
-  for (const auto& node : nodes1) {
-    std::cout << node << " ";
-  }
+  // auto value_vec1 = avl_tre.ShowAll();
+  // for (const auto& el : value_vec1) {
+  //   std::cout << el.ToString() << std::endl;
+  // }
+  // std::cout << "\n\n";
+  // std::vector<AbstractStore::Key> nodes1 = avl_tre.Keys();
+  // std::cout << "\n\n";
+  // for (const auto& node : nodes1) {
+  //   std::cout << node << " ";
+  // }
+  avl_tre.Export("omg.dat");
   return 0;
 }

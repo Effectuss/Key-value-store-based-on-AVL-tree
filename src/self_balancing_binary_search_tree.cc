@@ -133,20 +133,30 @@ std::size_t SelfBalancingBinarySearchTree::Upload(
   if (!file.is_open()) throw std::invalid_argument("File can't be opened");
   Key read_key;
   std::string read_value;
-  std::size_t count = 0;
+  std::size_t count_keys = 0;
   while (file >> read_key) {
     std::getline(file >> std::ws, read_value);
     Set(read_key, Value::FromString(read_value));
-    ++count;
+    ++count_keys;
   }
   file.close();
-
-  return count;
+  return count_keys;
 }
 
 std::size_t SelfBalancingBinarySearchTree::Export(
     const std::string& file_name) const {
-  return 0u;
+  std::ofstream file(file_name);
+  if (!file.is_open()) throw std::invalid_argument("File can't be opened");
+
+  std::size_t count_keys = 0;
+  auto keys = Keys();
+  auto values = ShowAll();
+  for (int i = 0; i < keys.size(); ++i) {
+    file << keys[i] << " " << values[i].ToQuotedString() << "\n";
+    ++count_keys;
+  }
+  file.close();
+  return count_keys;
 }
 
 // std::optional<std::size_t> SelfBalancingBinarySearchTree::TTL(
