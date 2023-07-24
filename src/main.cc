@@ -12,36 +12,44 @@ int main() {
   avl_tre.Set("key1", value);
   avl_tre.Set("key5", value);
   avl_tre.Set("key0", value);
-  std::vector<AbstractStore::Key> nodes = avl_tre.Keys();
-  for (const auto& node : nodes) {
-    std::cout << node << " ";
-  }
-  std::cout << std::endl;
-  auto value_vec = avl_tre.ShowAll();
-  for (const auto& el : value_vec) {
-    std::cout << el.ToString() << std::endl;
-  }
+  // std::vector<AbstractStore::Key> nodes = avl_tre.Keys();
+  // for (const auto& node : nodes) {
+  //   std::cout << node << " ";
+  // }
+  // std::cout << std::endl;
+  // auto value_vec = avl_tre.ShowAll();
+  // for (const auto& el : value_vec) {
+  //   std::cout << el.ToString() << std::endl;
+  // }
 
-  avl_tre.Rename("key0", "key15");
-  std::vector<AbstractStore::Key> nodes1 = avl_tre.Keys();
-  std::cout << "\n\n";
-  for (const auto& node : nodes1) {
-    std::cout << node << " ";
-  }
+  // avl_tre.Rename("key0", "key15");
 
-  std::cout << "\n\n####################\n\n";
+  // std::cout << "\n\n####################\n\n";
+  // auto value_vec1 = avl_tre.ShowAll();
+  // for (const auto& el : value_vec1) {
+  //   std::cout << el.ToString() << std::endl;
+  // }
+
+  // std::cout << "\n\n####################\n\n";
+
+  // avl_tre.Update("key15", "SAVA - 2000 EKV -");
+
+  // value_vec1 = avl_tre.ShowAll();
+  // for (const auto& el : value_vec1) {
+  //   std::cout << el.ToString() << std::endl;
+  // }
+
+  avl_tre.Upload("test.dat");
+
   auto value_vec1 = avl_tre.ShowAll();
   for (const auto& el : value_vec1) {
     std::cout << el.ToString() << std::endl;
   }
-
-  std::cout << "\n\n####################\n\n";
-
-  avl_tre.Update("key15", "SAVA - 2000 EKV -");
-
-  value_vec1 = avl_tre.ShowAll();
-  for (const auto& el : value_vec1) {
-    std::cout << el.ToString() << std::endl;
+  std::cout << "\n\n";
+  std::vector<AbstractStore::Key> nodes1 = avl_tre.Keys();
+  std::cout << "\n\n";
+  for (const auto& node : nodes1) {
+    std::cout << node << " ";
   }
   return 0;
 }

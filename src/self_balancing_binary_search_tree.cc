@@ -126,11 +126,30 @@ bool SelfBalancingBinarySearchTree::Rename(const Key& old_key,
   Set(new_key, node.value()->value);
   return true;
 }
+
 std::size_t SelfBalancingBinarySearchTree::Upload(
-    const std::string& file_name) {}
+    const std::string& file_name) {
+  std::ifstream file(file_name);
+  if (!file.is_open()) {
+    throw std::invalid_argument("File cant be opened");
+  }
+  Key read_key;
+  std::string read_value;
+  std::size_t count = 0;
+  while (file >> read_key) {
+    std::getline(file >> std::ws, read_value);
+    Set(read_key, Value::FromString(read_value));
+    ++count;
+  }
+  file.close();
+
+  return count;
+}
 
 std::size_t SelfBalancingBinarySearchTree::Export(
-    const std::string& file_name) const {}
+    const std::string& file_name) const {
+  return 0u;
+}
 
 // std::optional<std::size_t> SelfBalancingBinarySearchTree::TTL(
 //     const Key& key) const {}

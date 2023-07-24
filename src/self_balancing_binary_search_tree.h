@@ -2,6 +2,7 @@
 #define __SELF_BALANCING_BINARY_SEARCH_TREE_H__
 
 #include <cstddef>
+#include <fstream>
 #include <memory>
 
 #include "abstract_store.h"
@@ -16,6 +17,7 @@ class SelfBalancingBinarySearchTree : public AbstractStore {
   std::vector<Value> ShowAll() const override;
   bool Update(const Key& key, const std::string& new_value) override;
   bool Rename(const Key& old_key, const Key& new_key) override;
+
   std::size_t Upload(const std::string& file_name) override;
   std::size_t Export(const std::string& file_name) const override;
 
@@ -32,6 +34,7 @@ class SelfBalancingBinarySearchTree : public AbstractStore {
     std::unique_ptr<AVLNode> right;
     int height;
   };
+
   void InsertHelper(std::unique_ptr<AVLNode>& node, const Key& key,
                     const Value& value);
   std::optional<AVLNode*> FindNode(const std::unique_ptr<AVLNode>& node,

@@ -18,15 +18,16 @@
  */
 class Value {
  public:
+  // при валидации номера если будет буква он ее не прочитает а цифры прочитает
   Value() = default;
   Value(std::string last_name, std::string first_name, std::string birth_year,
         std::string city, std::string coins,
         std::optional<std::string> ttl = std::nullopt)
       : last_name_(std::move(last_name)),
         first_name_(std::move(first_name)),
-        birth_year_(ValidateNumber(std::move(birth_year))),
+        birth_year_(ValidateNumber(birth_year)),
         city_(std::move(city)),
-        coins_(ValidateNumber(std::move(coins))),
+        coins_(ValidateNumber(coins)),
         ttl_(ttl ? ValidateNumber(*ttl) : ttl),
         creation_time_(std::chrono::system_clock::now()) {}
 
