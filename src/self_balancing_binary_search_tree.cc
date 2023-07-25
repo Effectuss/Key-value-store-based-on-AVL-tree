@@ -34,6 +34,7 @@ SelfBalancingBinarySearchTree::FindMax(std::unique_ptr<AVLNode> node) {
   while (node->right != nullptr) node = std::move(node->right);
   return node;
 }
+
 std::unique_ptr<SelfBalancingBinarySearchTree::AVLNode>
 SelfBalancingBinarySearchTree::DeletHelper(std::unique_ptr<AVLNode> node,
                                            const Key& key) {
@@ -47,10 +48,10 @@ SelfBalancingBinarySearchTree::DeletHelper(std::unique_ptr<AVLNode> node,
       node = (node->left == nullptr) ? std::move(node->right)
                                      : std::move(node->left);
     } else {
-      std::unique_ptr<AVLNode> max_node = FindMax(std::move(node->left));
-      std::swap(node->key, max_node->key);
-      std::swap(node->value, max_node->value);
-      node->right = DeletHelper(std::move(node->right), max_node->key);
+      std::unique_ptr<AVLNode> max_left = FindMax(std::move(node->left));
+      std::swap(node->key, max_left->key);
+      std::swap(node->value, max_left->value);
+      node->left = DeletHelper(std::move(node->left), max_left->key);
     }
   }
   return node;
@@ -182,6 +183,28 @@ void SelfBalancingBinarySearchTree::UpdateHeight(
     const std::unique_ptr<AVLNode>& node) {
   node->height = std::max(GetHeight(node->left), GetHeight(node->right)) + 1;
 }
+
+int SelfBalancingBinarySearchTree::GetBalance(
+    const std::unique_ptr<AVLNode>& node) const {
+  return (node == nullptr) ? 0 : GetHeight(node->right) - GetHeight(node->left);
+}
+
+void SelfBalancingBinarySearchTree::SwapKeyAndValue(
+    std::unique_ptr<AVLNode>& node_a, std::unique_ptr<AVLNode>& node_b) {
+  std::swap(node_a->key, node_b->key);
+  std::swap(node_a->value, node_b->value);
+}
+
+void SelfBalancingBinarySearchTree::RotateLeft(std::unique_ptr<AVLNode>& node) {
+}
+
+void SelfBalancingBinarySearchTree::RotateRight(
+    std::unique_ptr<AVLNode>& node) {
+  SwapKeyAndValue(node, node->left);
+}
+
+void SelfBalancingBinarySearchTree::BalanceNode(
+    std::unique_ptr<AVLNode>& node) {}
 
 void SelfBalancingBinarySearchTree::MakeDotFile(
     const std::string& file_name) const {

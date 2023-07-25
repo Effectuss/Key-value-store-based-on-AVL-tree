@@ -1,6 +1,7 @@
-key33 "Васильев" "Иван" 2001 "Ростов" 55
-key332 "Иванов" "Василий" 2000 "Москва" 55 
-key002 "Petrov" "Petr" 1990 "Tver" 100
-key0003 "Ivanov" "Ivan" 2000 "Moscow" 55
-key3123 "Sidorov" "Sergei" 1980 "Novosibirsk" 50
-key412 "Vasilev" "Vasiliy" 2000 "Moscow" 150
+1 "Васильев" "Иван" 2001 "Ростов" 55
+2 "Иванов" "Василий" 2000 "Москва" 55 
+3 "Petrov" "Petr" 1990 "Tver" 100
+4 "Ivanov" "Ivan" 2000 "Moscow" 55
+5 "Sidorov" "Sergei" 1980 "Novosibirsk" 50
+6 "Vasilev" "Vasiliy" 2000 "Moscow" 150
+7 "Urantaev" "Dima" 1993 "Nsk" 1234
