@@ -33,14 +33,13 @@ class SelfBalancingBinarySearchTree : public AbstractStore {
     int height;
   };
 
+  void InOrderTraversal(const std::unique_ptr<AVLNode>& node,
+                        std::vector<AbstractStore::Key>& keys,
+                        std::vector<Value>& values) const;
   void InsertHelper(std::unique_ptr<AVLNode>& node, const Key& key,
                     const Value& value);
   std::optional<AVLNode*> FindNode(const std::unique_ptr<AVLNode>& node,
                                    const Key& key) const;
-  void InOrderTraversalKeys(const std::unique_ptr<AVLNode>& node,
-                            std::vector<AbstractStore::Key>& vec_keys) const;
-  void InOrderTraversalValues(const std::unique_ptr<AVLNode>& node,
-                              std::vector<Value>& vec_values) const;
   std::unique_ptr<AVLNode> DeletHelper(std::unique_ptr<AVLNode> node,
                                        const Key& key);
   std::unique_ptr<AVLNode> FindMin(std::unique_ptr<AVLNode> node);

@@ -80,33 +80,27 @@ void SelfBalancingBinarySearchTree::InsertHelper(std::unique_ptr<AVLNode>& node,
     InsertHelper(node->right, key, value);
   }
 }
-
-void SelfBalancingBinarySearchTree::InOrderTraversalKeys(
-    const std::unique_ptr<AVLNode>& node, std::vector<Key>& vec_keys) const {
+void SelfBalancingBinarySearchTree::InOrderTraversal(
+    const std::unique_ptr<AVLNode>& node, std::vector<AbstractStore::Key>& keys,
+    std::vector<Value>& values) const {
   if (node == nullptr) return;
-  InOrderTraversalKeys(node->left, vec_keys);
-  vec_keys.push_back(node->key);
-  InOrderTraversalKeys(node->right, vec_keys);
-}
-
-void SelfBalancingBinarySearchTree::InOrderTraversalValues(
-    const std::unique_ptr<AVLNode>& node,
-    std::vector<Value>& vec_values) const {
-  if (node == nullptr) return;
-  InOrderTraversalValues(node->left, vec_values);
-  vec_values.push_back(node->value);
-  InOrderTraversalValues(node->right, vec_values);
+  InOrderTraversal(node->left, keys, values);
+  keys.push_back(node->key);
+  values.push_back(node->value);
+  InOrderTraversal(node->right, keys, values);
 }
 
 std::vector<AbstractStore::Key> SelfBalancingBinarySearchTree::Keys() const {
   std::vector<AbstractStore::Key> vec_keys;
-  InOrderTraversalKeys(root_, vec_keys);
+  std::vector<Value> vec_values;
+  InOrderTraversal(root_, vec_keys, vec_values);
   return vec_keys;
 }
 
 std::vector<Value> SelfBalancingBinarySearchTree::ShowAll() const {
   std::vector<Value> vec_values;
-  InOrderTraversalValues(root_, vec_values);
+  std::vector<AbstractStore::Key> vec_keys;
+  InOrderTraversal(root_, vec_keys, vec_values);
   return vec_values;
 }
 
