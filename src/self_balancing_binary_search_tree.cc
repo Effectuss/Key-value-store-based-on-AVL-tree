@@ -48,8 +48,8 @@ SelfBalancingBinarySearchTree::DeletHelper(std::unique_ptr<AVLNode> node,
                                      : std::move(node->left);
     } else {
       std::unique_ptr<AVLNode> max_node = FindMax(std::move(node->left));
-      node->key = max_node->key;
-      node->value = max_node->value;
+      std::swap(node->key, max_node->key);
+      std::swap(node->value, max_node->value);
       node->right = DeletHelper(std::move(node->right), max_node->key);
     }
   }
@@ -171,4 +171,41 @@ std::vector<AbstractStore::Key> SelfBalancingBinarySearchTree::Find(
     }
   }
   return result_match;
+}
+
+int SelfBalancingBinarySearchTree::GetHeight(
+    const std::unique_ptr<AVLNode>& node) const {
+  return node == nullptr ? -1 : node->height;
+}
+
+void SelfBalancingBinarySearchTree::UpdateHeight(
+    const std::unique_ptr<AVLNode>& node) {
+  node->height = std::max(GetHeight(node->left), GetHeight(node->right)) + 1;
+}
+
+void SelfBalancingBinarySearchTree::MakeDotFile(
+    const std::string& file_name) const {
+  std::ofstream file;
+  file.open(file_name + ".dot", std::ios::trunc);
+  if (!file.is_open()) throw std::invalid_argument("File can't be opened");
+  file << "digraph BST {\n";
+  file << "    node [shape=circle, style=filled, fillcolor=green];\n";
+  std::function<void(const std::unique_ptr<AVLNode>& node)> writeNodes =
+      [&](const std::unique_ptr<AVLNode>& node) {
+        if (node == nullptr) {
+          return;
+        }
+        file << "    " << node->key << ";\n";
+        if (node->left != nullptr) {
+          file << "    " << node->key << " -> " << node->left->key << ";\n";
+          writeNodes(node->left);
+        }
+        if (node->right != nullptr) {
+          file << "    " << node->key << " -> " << node->right->key << ";\n";
+          writeNodes(node->right);
+        }
+      };
+  writeNodes(root_);
+  file << "}";
+  file.close();
 }

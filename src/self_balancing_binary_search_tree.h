@@ -3,6 +3,7 @@
 
 #include <cstddef>
 #include <fstream>
+#include <functional>
 #include <memory>
 
 #include "abstract_store.h"
@@ -21,11 +22,12 @@ class SelfBalancingBinarySearchTree : public AbstractStore {
   std::size_t Export(const std::string& file_name) const override;
   std::optional<std::size_t> TTL(const Key& key) const override;
   std::vector<Key> Find(const std::string& value) const override;
+  void MakeDotFile(const std::string& file_name) const;
 
  private:
   struct AVLNode {
     AVLNode(const AbstractStore::Key& k, const Value& v)
-        : key(k), value(v), left(nullptr), right(nullptr), height(1){};
+        : key(k), value(v), left(nullptr), right(nullptr), height(0){};
     AbstractStore::Key key;
     Value value;
     std::unique_ptr<AVLNode> left;
@@ -44,6 +46,9 @@ class SelfBalancingBinarySearchTree : public AbstractStore {
                                        const Key& key);
   std::unique_ptr<AVLNode> FindMin(std::unique_ptr<AVLNode> node);
   std::unique_ptr<AVLNode> FindMax(std::unique_ptr<AVLNode> node);
+
+  int GetHeight(const std::unique_ptr<AVLNode>& node) const;
+  void UpdateHeight(const std::unique_ptr<AVLNode>& node);
 
   std::unique_ptr<SelfBalancingBinarySearchTree::AVLNode> root_;
 };
