@@ -147,6 +147,15 @@ TEST(AVLTree, DeleteNonexistentNode) {
   EXPECT_TRUE(std::abs(avl_tree.GetBalance(avl_tree.GetRootKey())) <= 1);
 }
 
+TEST(AVLTree, GetValue) {
+  SelfBalancingBinarySearchTree avl_tree;
+  InsertNodes(avl_tree);
+  EXPECT_TRUE(avl_tree.Get("A") ==
+              Value("Pupkin", "Vasya", "1992", "Moskow", "23"));
+  EXPECT_FALSE(avl_tree.Get("A") ==
+               Value("Pupkin", "Petr", "2000", "Nsk", "23"));
+}
+
 int main(int argc, char** argv) {
   ::testing::InitGoogleTest(&argc, argv);
   return RUN_ALL_TESTS();
