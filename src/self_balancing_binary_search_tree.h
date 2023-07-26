@@ -15,6 +15,7 @@ class SelfBalancingBinarySearchTree : public AbstractStore {
   bool Set(const Key& key, const Value& value) override;
   bool Exists(const Key& key) const override;
   bool Del(const Key& key) override;
+
   std::optional<Value> Get(const Key& key) const override;
   std::vector<Key> Keys() const override;
   std::vector<Value> ShowAll() const override;
@@ -26,6 +27,7 @@ class SelfBalancingBinarySearchTree : public AbstractStore {
   std::vector<Key> Find(const std::string& value) const override;
   void MakeDotFile(const std::string& file_name) const;
   int GetBalance(const Key& key) const;
+  const Key GetRootKey() const;
 
  private:
   struct AVLNode {

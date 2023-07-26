@@ -1,10 +1,3 @@
 digraph BST {
     node [shape=circle, style=filled, fillcolor=green];
-    v;
-    v -> d;
-    d;
-    d -> a;
-    a;
-    v -> z;
-    z;
 }

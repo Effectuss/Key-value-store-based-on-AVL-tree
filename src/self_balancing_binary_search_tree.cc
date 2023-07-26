@@ -19,6 +19,10 @@ bool SelfBalancingBinarySearchTree::Exists(const Key& key) const {
 
 bool SelfBalancingBinarySearchTree::Del(const Key& key) {
   if (!FindNode(root_, key).has_value()) return false;
+  if (root_->left == nullptr && root_->right == nullptr) {
+    root_ = nullptr;
+    return true;
+  }
   root_ = DeletHelper(std::move(root_), key);
   return root_ != nullptr;
 }
@@ -264,6 +268,12 @@ int SelfBalancingBinarySearchTree::GetBalance(const Key& key) const {
              ? 0
              : GetHeight(node.value()->right) - GetHeight(node.value()->left);
 }
+
 int SelfBalancingBinarySearchTree::GetHeight(const AVLNode* node) const {
   return (node == nullptr) ? -1 : node->height;
+}
+
+const AbstractStore::Key SelfBalancingBinarySearchTree::GetRootKey() const {
+  if (root_ == nullptr) return "";
+  return root_->key;
 }
