@@ -54,6 +54,10 @@ SelfBalancingBinarySearchTree::DeletHelper(std::unique_ptr<AVLNode> node,
       node->left = DeletHelper(std::move(node->left), max_left->key);
     }
   }
+  if (node != nullptr) {
+    UpdateHeight(node);
+    BalanceNode(node);
+  }
   return node;
 }
 
@@ -80,7 +84,10 @@ void SelfBalancingBinarySearchTree::InsertHelper(std::unique_ptr<AVLNode>& node,
   } else {
     InsertHelper(node->right, key, value);
   }
+  UpdateHeight(node);
+  BalanceNode(node);
 }
+
 void SelfBalancingBinarySearchTree::InOrderTraversal(
     const std::unique_ptr<AVLNode>& node, std::vector<AbstractStore::Key>& keys,
     std::vector<Value>& values) const {
@@ -176,11 +183,11 @@ std::vector<AbstractStore::Key> SelfBalancingBinarySearchTree::Find(
 
 int SelfBalancingBinarySearchTree::GetHeight(
     const std::unique_ptr<AVLNode>& node) const {
-  return node == nullptr ? -1 : node->height;
+  return (node == nullptr) ? -1 : node->height;
 }
 
 void SelfBalancingBinarySearchTree::UpdateHeight(
-    const std::unique_ptr<AVLNode>& node) {
+    std::unique_ptr<AVLNode>& node) {
   node->height = std::max(GetHeight(node->left), GetHeight(node->right)) + 1;
 }
 
@@ -196,15 +203,59 @@ void SelfBalancingBinarySearchTree::SwapKeyAndValue(
 }
 
 void SelfBalancingBinarySearchTree::RotateLeft(std::unique_ptr<AVLNode>& node) {
+  // SwapKeyAndValue(node, node->right);
+  // std::unique_ptr<AVLNode> buffer = std::move(node->left);
+  // node->left = std::move(node->right);
+  // node->right = std::move(node->left->right);
+  // node->right->left = std::move(node->right->right);
+  // node->left->right = std::move(node->left->left);
+  // node->left->left = std::move(buffer);
+  // UpdateHeight(node->left);
+  // UpdateHeight(node);
+
+  // version 2
+  std::unique_ptr<AVLNode> buffer = std::move(node->right);
+  node->right = std::move(buffer->left);
+  buffer->left = std::move(node);
+  node = std::move(buffer);
+  UpdateHeight(node->left);
+  UpdateHeight(node);
 }
 
 void SelfBalancingBinarySearchTree::RotateRight(
     std::unique_ptr<AVLNode>& node) {
-  SwapKeyAndValue(node, node->left);
+  // SwapKeyAndValue(node, node->left);
+  // std::unique_ptr<AVLNode> buffer = std::move(node->right);
+  // node->right = std::move(node->left);
+  // node->left = std::move(node->right->left);
+  // node->right->left = std::move(node->right->right);
+  // node->right->right = std::move(buffer);
+  // UpdateHeight(node->right);
+  // UpdateHeight(node);
+
+  // version 2
+  std::unique_ptr<AVLNode> buffer = std::move(node->left);
+  node->left = std::move(buffer->right);
+  buffer->right = std::move(node);
+  node = std::move(buffer);
+  UpdateHeight(node->right);
+  UpdateHeight(node);
 }
 
 void SelfBalancingBinarySearchTree::BalanceNode(
-    std::unique_ptr<AVLNode>& node) {}
+    std::unique_ptr<AVLNode>& node) {
+  if (GetBalance(node) == -2) {
+    if (GetBalance(node->left) > 0) {
+      RotateLeft(node->left);
+    }
+    RotateRight(node);
+  } else if (GetBalance(node) == 2) {
+    if (GetBalance(node->right) < 0) {
+      RotateRight(node->right);
+    }
+    RotateLeft(node);
+  }
+}
 
 void SelfBalancingBinarySearchTree::MakeDotFile(
     const std::string& file_name) const {
