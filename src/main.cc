@@ -2,18 +2,25 @@
 
 #include "self_balancing_binary_search_tree.h"
 int main() {
-  SelfBalancingBinarySearchTree avl_tre;
-  Value value("Vasya", "Pupkin", "1992", "Moskow", "23");
-  Value value1("Petya", "Popov", "1998", "Novosibirsk", "11");
-  Value value3("Sidorov", "Sergei", "1980", "Novosibirsk", "50");
-  avl_tre.Set("1", value3);
-  avl_tre.Set("2", value1);
-  avl_tre.Set("3", value);
-  avl_tre.Set("4", value1);
-  avl_tre.Set("0", value1);
-  avl_tre.Set("6", value1);
-  avl_tre.Set("5", value);
-  avl_tre.Del("2");
+  // SelfBalancingBinarySearchTree avl_tre;
+  // Value value("Vasya", "Pupkin", "1992", "Moskow", "23");
+  // Value value1("Petya", "Popov", "1998", "Novosibirsk", "11");
+  // Value value3("Sidorov", "Sergei", "1980", "Novosibirsk", "50");
+  // avl_tre.Set("1", value3);
+  // avl_tre.Set("2", value1);
+  // avl_tre.Set("3", value);
+  // avl_tre.Set("4", value1);
+  // avl_tre.Set("0", value1);
+  // avl_tre.Set("6", value1);
+  // avl_tre.Set("5", value);
+  SelfBalancingBinarySearchTree avl_tree;
+  Value val("Pupkin", "Vasya", "1992", "Moskow", "23");
+  avl_tree.Set("10", val);
+  avl_tree.Set("5", val);
+  avl_tree.Set("15", val);
+  avl_tree.Set("3", val);
+  avl_tree.MakeDotFile("test");
+  // avl_tre.Del("2");
   // avl_tre.Del("3");
   // avl_tre.Del("6");
   // avl_tre.Del("5");
@@ -55,16 +62,14 @@ int main() {
   //   std::cout << el.ToString() << std::endl;
   // }
   // std::cout << "\n\n";
-  std::vector<AbstractStore::Key> nodes1 = avl_tre.Keys();
+  std::vector<AbstractStore::Key> nodes1 = avl_tree.Keys();
   std::cout << "\n\n";
   for (const auto& node : nodes1) {
     std::cout << node << " ";
   }
-  avl_tre.Export("omg.dat");
-  auto res = avl_tre.Find("- - - Novosibirsk -");
   // for (const auto& el : res) {
   //   std::cout << el << std::endl;
   // }
-  avl_tre.MakeDotFile("test");
+  avl_tree.MakeDotFile("test");
   return 0;
 }

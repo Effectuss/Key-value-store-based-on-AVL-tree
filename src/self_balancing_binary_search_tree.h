@@ -8,6 +8,8 @@
 
 #include "abstract_store.h"
 
+struct AVLNode;
+
 class SelfBalancingBinarySearchTree : public AbstractStore {
  public:
   bool Set(const Key& key, const Value& value) override;
@@ -23,6 +25,7 @@ class SelfBalancingBinarySearchTree : public AbstractStore {
   std::optional<std::size_t> TTL(const Key& key) const override;
   std::vector<Key> Find(const std::string& value) const override;
   void MakeDotFile(const std::string& file_name) const;
+  int GetBalance(const Key& key) const;
 
  private:
   struct AVLNode {
@@ -35,6 +38,9 @@ class SelfBalancingBinarySearchTree : public AbstractStore {
     int height;
   };
 
+  int GetBalance(const std::unique_ptr<AVLNode>& node) const;
+  int GetHeight(const std::unique_ptr<AVLNode>& node) const;
+  int GetHeight(const AVLNode* node) const;
   void InOrderTraversal(const std::unique_ptr<AVLNode>& node,
                         std::vector<AbstractStore::Key>& keys,
                         std::vector<Value>& values) const;
@@ -44,9 +50,7 @@ class SelfBalancingBinarySearchTree : public AbstractStore {
                                    const Key& key) const;
   std::unique_ptr<AVLNode> DeletHelper(std::unique_ptr<AVLNode> node,
                                        const Key& key);
-  int GetHeight(const std::unique_ptr<AVLNode>& node) const;
   void UpdateHeight(std::unique_ptr<AVLNode>& node);
-  int GetBalance(const std::unique_ptr<AVLNode>& node) const;
   void RotateLeft(std::unique_ptr<AVLNode>& node);
   void RotateRight(std::unique_ptr<AVLNode>& node);
   void BalanceNode(std::unique_ptr<AVLNode>& node);

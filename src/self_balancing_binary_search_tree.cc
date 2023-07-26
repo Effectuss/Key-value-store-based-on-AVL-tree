@@ -257,3 +257,13 @@ void SelfBalancingBinarySearchTree::MakeDotFile(
   file << "}";
   file.close();
 }
+
+int SelfBalancingBinarySearchTree::GetBalance(const Key& key) const {
+  auto node = FindNode(root_, key);
+  return (node.value() == nullptr)
+             ? 0
+             : GetHeight(node.value()->right) - GetHeight(node.value()->left);
+}
+int SelfBalancingBinarySearchTree::GetHeight(const AVLNode* node) const {
+  return (node == nullptr) ? -1 : node->height;
+}
