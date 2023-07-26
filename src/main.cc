@@ -6,9 +6,18 @@ int main() {
   Value value("Vasya", "Pupkin", "1992", "Moskow", "23");
   Value value1("Petya", "Popov", "1998", "Novosibirsk", "11");
   Value value3("Sidorov", "Sergei", "1980", "Novosibirsk", "50");
-  // avl_tre.Set("key0", value3);
-  // avl_tre.Set("key3", value1);
-  // avl_tre.Set("key2", value);
+  avl_tre.Set("1", value3);
+  avl_tre.Set("2", value1);
+  avl_tre.Set("3", value);
+  avl_tre.Set("4", value1);
+  avl_tre.Set("0", value1);
+  avl_tre.Set("6", value1);
+  avl_tre.Set("5", value);
+  avl_tre.Del("2");
+  // avl_tre.Del("3");
+  // avl_tre.Del("6");
+  // avl_tre.Del("5");
+  // avl_tre.Del("0");
   // avl_tre.Set("key1", value);
   // avl_tre.Set("key5", value);
   // avl_tre.Set("key0", value);
@@ -39,7 +48,7 @@ int main() {
   //   std::cout << el.ToString() << std::endl;
   // }
 
-  avl_tre.Upload("test.dat");
+  // avl_tre.Upload("test.dat");
 
   // auto value_vec1 = avl_tre.ShowAll();
   // for (const auto& el : value_vec1) {
