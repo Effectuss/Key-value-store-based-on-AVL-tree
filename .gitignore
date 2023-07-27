@@ -33,3 +33,4 @@
 
 .vscode/
 src/a.out.dSYM/
+*.DS_Store

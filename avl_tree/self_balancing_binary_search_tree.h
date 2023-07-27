@@ -56,7 +56,6 @@ class SelfBalancingBinarySearchTree : public AbstractStore {
   void RotateRight(std::unique_ptr<AVLNode>& node);
   void BalanceNode(std::unique_ptr<AVLNode>& node);
   const AVLNode* FindMin(const AVLNode* node) const;
-  const AVLNode* FindMax(const AVLNode* node) const;
 
   std::unique_ptr<SelfBalancingBinarySearchTree::AVLNode> root_;
 };

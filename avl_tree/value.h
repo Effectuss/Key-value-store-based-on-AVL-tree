@@ -19,15 +19,11 @@
  */
 class Value {
  public:
-  // при валидации номера если будет буква он ее не прочитает а цифры прочитает
-  // если в файле будет введен только ключ, то к нам в бд добавиться пустой
-  // пользователь ну только с ключем
-  // можно ввести отрицаительную дату
   enum TypeValidation { kDate, kCoin, kTTL };
   Value() = default;
-  Value(std::string last_name, std::string first_name, std::string birth_year,
-        std::string city, std::string coins,
-        std::optional<std::string> ttl = std::nullopt)
+  Value(const std::string &last_name, const std::string &first_name,
+        const std::string &birth_year, const std::string &city,
+        const std::string &coins, std::optional<std::string> ttl = std::nullopt)
       : last_name_(std::move(last_name)),
         first_name_(std::move(first_name)),
         birth_year_(ValidateNumber(birth_year, TypeValidation::kDate)),

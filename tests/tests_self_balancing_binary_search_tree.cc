@@ -322,7 +322,11 @@ TEST(AVLTreeTest, FindTest2) {
             std::vector<AbstractStore::Key>({"key1", "key3", "key6", "key7"}));
 }
 
-TEST(AVLTreeTest, TTLTest) {
+TEST(AVLTreeTest, TTLTestExist) {
+  
+}
+
+TEST(AVLTreeTest, TTLTestEnd) {
   
 }
 

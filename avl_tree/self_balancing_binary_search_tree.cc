@@ -30,11 +30,6 @@ SelfBalancingBinarySearchTree::FindMin(const AVLNode* node) const {
   }
   return node;
 }
-const SelfBalancingBinarySearchTree::AVLNode*
-SelfBalancingBinarySearchTree::FindMax(const AVLNode* node) const {
-  while (node->right != nullptr) node = node->right.get();
-  return node;
-}
 
 std::unique_ptr<SelfBalancingBinarySearchTree::AVLNode>
 SelfBalancingBinarySearchTree::DeletHelper(std::unique_ptr<AVLNode> node,
@@ -128,7 +123,6 @@ bool SelfBalancingBinarySearchTree::Rename(const Key& old_key,
   Value tmp_val = node.value()->value;
   Del(old_key);
   return Set(new_key, tmp_val);
-  ;
 }
 
 std::size_t SelfBalancingBinarySearchTree::Upload(
@@ -155,7 +149,7 @@ std::size_t SelfBalancingBinarySearchTree::Export(
   std::size_t count_keys = 0;
   auto keys = Keys();
   auto values = ShowAll();
-  for (int i = 0; i < keys.size(); ++i) {
+  for (auto i = 0u; i < keys.size(); ++i) {
     file << keys[i] << " " << values[i].ToQuotedString() << "\n";
     ++count_keys;
   }
@@ -175,7 +169,7 @@ std::vector<AbstractStore::Key> SelfBalancingBinarySearchTree::Find(
   std::vector<Key> result_match;
   std::vector<Key> keys = Keys();
   std::vector<Value> value_storage = ShowAll();
-  for (int i = 0; i < keys.size(); ++i) {
+  for (auto i = 0u; i < keys.size(); ++i) {
     if (value_storage[i].Match(value)) {
       result_match.push_back(keys[i]);
     }
