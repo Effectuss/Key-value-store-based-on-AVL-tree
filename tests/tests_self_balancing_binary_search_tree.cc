@@ -324,9 +324,24 @@ TEST(AVLTreeTest, FindTest2) {
             std::vector<AbstractStore::Key>({"key1", "key3", "key6", "key7"}));
 }
 
-TEST(AVLTreeTest, TTLTestExist) {}
+TEST(AVLTreeTest, TTLTestExist) {
+  SelfBalancingBinarySearchTree avl_tree;
 
-TEST(AVLTreeTest, TTLTestEnd) {}
+  Value value1("Ivanov", "Ivan", "2000", "Moscow", "55", "1");
+  Value value2("Petrov", "Petr", "1990", "St. Petersburg", "100", "40");
+  Value value3("Sidorov", "Sergei", "1980", "Novosibirsk", "123");
+
+  EXPECT_TRUE(avl_tree.Set("key1", value1));
+  EXPECT_TRUE(avl_tree.Set("key2", value2));
+  EXPECT_TRUE(avl_tree.Set("key3", value3));
+  EXPECT_EQ(avl_tree.TTL("key1"), 1u);
+  EXPECT_EQ(avl_tree.TTL("key2"), 40u);
+  EXPECT_EQ(avl_tree.TTL("key3"), std::nullopt);
+}
+
+TEST(AVLTreeTest, TTLTestEnd) {
+  
+}
 
 int main(int argc, char** argv) {
   ::testing::InitGoogleTest(&argc, argv);
