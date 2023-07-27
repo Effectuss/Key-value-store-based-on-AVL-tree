@@ -86,7 +86,7 @@ TEST(AVLTreeTest, LoopSet) {
     EXPECT_TRUE(avl_tree.Set(std::to_string(i), val));
     EXPECT_TRUE(std::abs(avl_tree.GetBalance(avl_tree.GetRootKey())) <= 1);
   }
-  avl_tree.MakeDotFile("tree_100_values");
+  avl_tree.MakeDotFile("../../resources/tree_100_elements");
 }
 
 TEST(AVLTreeTest, DeleteLeafNode) {
@@ -172,7 +172,7 @@ TEST(AVLTreeTest, DeleteLoop) {
     EXPECT_TRUE(avl_tree.Del(std::to_string(i)));
     EXPECT_TRUE(std::abs(avl_tree.GetBalance(avl_tree.GetRootKey())) <= 1);
   }
-  avl_tree.MakeDotFile("tree_with_delet_node");
+  avl_tree.MakeDotFile("../../resources/tree_with_delet_node");
   // Try deleting a non-existent node
   EXPECT_FALSE(avl_tree.Del("Z"));
   EXPECT_FALSE(avl_tree.Exists("Z"));
@@ -339,9 +339,7 @@ TEST(AVLTreeTest, TTLTestExist) {
   EXPECT_EQ(avl_tree.TTL("key3"), std::nullopt);
 }
 
-TEST(AVLTreeTest, TTLTestEnd) {
-  
-}
+TEST(AVLTreeTest, TTLTestEnd) {}
 
 int main(int argc, char** argv) {
   ::testing::InitGoogleTest(&argc, argv);

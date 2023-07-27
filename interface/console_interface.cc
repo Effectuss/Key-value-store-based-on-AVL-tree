@@ -68,6 +68,7 @@ void Console::EnterCommand() {
 void Console::Set(const std::vector<std::string>& tokens) {
   if (tokens.size() == 7 or (tokens.size() == 9 and tokens[7] == "EX")) {
     try {
+      store_->DeleteExpiredElements();
       std::string key = tokens[1];
       std::string last_name = tokens[2];
       std::string first_name = tokens[3];
@@ -78,6 +79,7 @@ void Console::Set(const std::vector<std::string>& tokens) {
           tokens.size() == 9 ? std::make_optional(tokens[8]) : std::nullopt;
 
       Value value(last_name, first_name, birth_year, city, coins, ttl);
+
       if (store_->Set(key, value)) {
         std::cout << "> OK\n";
       } else {
@@ -94,6 +96,7 @@ void Console::Set(const std::vector<std::string>& tokens) {
 
 void Console::Get(const std::vector<std::string>& tokens) {
   if (tokens.size() == 2) {
+    store_->DeleteExpiredElements();
     std::string key = tokens[1];
     std::optional<Value> value = store_->Get(key);
     if (value.has_value()) {
@@ -108,6 +111,7 @@ void Console::Get(const std::vector<std::string>& tokens) {
 
 void Console::Exists(const std::vector<std::string>& tokens) {
   if (tokens.size() == 2) {
+    store_->DeleteExpiredElements();
     std::string key = tokens[1];
     bool exists = store_->Exists(key);
     std::string ans = exists ? "true" : "false";
@@ -119,6 +123,7 @@ void Console::Exists(const std::vector<std::string>& tokens) {
 
 void Console::Del(const std::vector<std::string>& tokens) {
   if (tokens.size() == 2) {
+    store_->DeleteExpiredElements();
     std::string key = tokens[1];
     bool deleted = store_->Del(key);
     std::string ans = deleted ? "true" : "false";
@@ -131,6 +136,7 @@ void Console::Del(const std::vector<std::string>& tokens) {
 void Console::Update(const std::vector<std::string>& tokens) {
   if (tokens.size() == 7) {
     try {
+      store_->DeleteExpiredElements();
       std::string key = tokens[1];
       std::string last_name = tokens[2];
       std::string first_name = tokens[3];
@@ -156,6 +162,7 @@ void Console::Update(const std::vector<std::string>& tokens) {
 
 void Console::Keys(const std::vector<std::string>& tokens) {
   if (tokens.size() == 1) {
+    store_->DeleteExpiredElements();
     std::vector<std::string> keys = store_->Keys();
     if (keys.empty()) {
       std::cout << "> (null)\n";
@@ -173,6 +180,7 @@ void Console::Keys(const std::vector<std::string>& tokens) {
 
 void Console::Rename(const std::vector<std::string>& tokens) {
   if (tokens.size() == 3) {
+    store_->DeleteExpiredElements();
     std::string old_key = tokens[1];
     std::string new_key = tokens[2];
     if (store_->Rename(old_key, new_key)) {
@@ -187,6 +195,7 @@ void Console::Rename(const std::vector<std::string>& tokens) {
 
 void Console::TTL(const std::vector<std::string>& tokens) {
   if (tokens.size() == 2) {
+    store_->DeleteExpiredElements();
     std::string key = tokens[1];
     std::optional<std::size_t> ttl = store_->TTL(key);
     if (ttl.has_value()) {
@@ -202,6 +211,7 @@ void Console::TTL(const std::vector<std::string>& tokens) {
 void Console::Find(const std::vector<std::string>& tokens) {
   if (tokens.size() == 6) {
     try {
+      store_->DeleteExpiredElements();
       std::string last_name = tokens[1];
       std::string first_name = tokens[2];
       std::string birth_year = tokens[3];
@@ -231,6 +241,7 @@ void Console::Find(const std::vector<std::string>& tokens) {
 
 void Console::ShowAll(const std::vector<std::string>& tokens) {
   if (tokens.size() == 1) {
+    store_->DeleteExpiredElements();
     std::vector<Value> values = store_->ShowAll();
     if (values.empty()) {
       std::cout << "> (null)\n";
@@ -256,6 +267,7 @@ void Console::ShowAll(const std::vector<std::string>& tokens) {
 
 void Console::Upload(const std::vector<std::string>& tokens) {
   if (tokens.size() == 2) {
+    store_->DeleteExpiredElements();
     try {
       std::string file_path = tokens[1];
       std::size_t count = store_->Upload(file_path);
@@ -271,6 +283,7 @@ void Console::Upload(const std::vector<std::string>& tokens) {
 
 void Console::Export(const std::vector<std::string>& tokens) {
   if (tokens.size() == 2) {
+    store_->DeleteExpiredElements();
     try {
       std::string file_path = tokens[1];
       std::size_t count = store_->Export(file_path);

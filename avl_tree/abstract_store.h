@@ -32,6 +32,7 @@ class AbstractStore {
   virtual std::size_t Export(const std::string& file_name) const = 0;
   virtual std::optional<std::size_t> TTL(const Key& key) const = 0;
   virtual std::vector<Key> Find(const std::string& value) const = 0;
+  virtual void DeleteExpiredElements() = 0;
 };
 
 #endif  // __ABSTRACT_STORE_H__

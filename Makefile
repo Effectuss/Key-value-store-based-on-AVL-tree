@@ -19,3 +19,4 @@ check: build
 
 clean:
 	@rm -rf build
+	@cd resources; rm -f tree_100_elements.dot tree_with_delet_node.dot

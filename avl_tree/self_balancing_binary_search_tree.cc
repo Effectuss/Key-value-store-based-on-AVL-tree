@@ -1,6 +1,5 @@
 #include "self_balancing_binary_search_tree.h"
 
-#include <iostream>
 bool SelfBalancingBinarySearchTree::Set(const Key& key, const Value& value) {
   if (FindNode(root_, key).has_value()) return false;
   InsertHelper(root_, key, value);
@@ -9,7 +8,9 @@ bool SelfBalancingBinarySearchTree::Set(const Key& key, const Value& value) {
 
 std::optional<Value> SelfBalancingBinarySearchTree::Get(const Key& key) const {
   auto result = FindNode(root_, key);
-  if (result.has_value()) return result.value()->value;
+  if (result.has_value()) {
+    return result.value()->value;
+  }
   return std::nullopt;
 }
 
@@ -267,4 +268,24 @@ int SelfBalancingBinarySearchTree::GetHeight(const AVLNode* node) const {
 const AbstractStore::Key SelfBalancingBinarySearchTree::GetRootKey() const {
   if (root_ == nullptr) return "";
   return root_->key;
+}
+
+void SelfBalancingBinarySearchTree::DeleteExpiredElements() {
+  root_ = std::move(DeleteExpiredElementsHelper(root_));
+}
+
+std::unique_ptr<SelfBalancingBinarySearchTree::AVLNode>&
+SelfBalancingBinarySearchTree::DeleteExpiredElementsHelper(
+    std::unique_ptr<AVLNode>& node) {
+  if (node == nullptr) {
+    return node;
+  } else if (node->value.TTL() == std::nullopt) {
+    return node;
+  } else if (node->value.TTL() == 0u) {
+    node = DeletHelper(std::move(node), node->key);
+    return node;
+  }
+  DeleteExpiredElementsHelper(node->left);
+  DeleteExpiredElementsHelper(node->right);
+  return node;
 }
