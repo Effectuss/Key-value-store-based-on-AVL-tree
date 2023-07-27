@@ -16,8 +16,8 @@ class SelfBalancingBinarySearchTree : public AbstractStore {
   bool Exists(const Key& key) const override;
   bool Del(const Key& key) override;
   std::optional<Value> Get(const Key& key) const override;
-  
   std::vector<Key> Keys() const override;
+  
   std::vector<Value> ShowAll() const override;
   bool Update(const Key& key, const std::string& new_value) override;
   bool Rename(const Key& old_key, const Key& new_key) override;
