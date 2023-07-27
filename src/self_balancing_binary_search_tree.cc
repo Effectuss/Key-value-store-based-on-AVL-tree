@@ -125,9 +125,10 @@ bool SelfBalancingBinarySearchTree::Rename(const Key& old_key,
                                            const Key& new_key) {
   auto node = FindNode(root_, old_key);
   if (!node.has_value()) return false;
-  Del(node.value()->key);
-  Set(new_key, node.value()->value);
-  return true;
+  Value tmp_val = node.value()->value;
+  Del(old_key);
+  return Set(new_key, tmp_val);
+  ;
 }
 
 std::size_t SelfBalancingBinarySearchTree::Upload(

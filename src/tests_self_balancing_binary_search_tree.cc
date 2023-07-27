@@ -66,6 +66,7 @@ TEST(AVLTree, LoopSet) {
     EXPECT_TRUE(avl_tree.Set(std::to_string(i), val));
     EXPECT_TRUE(std::abs(avl_tree.GetBalance(avl_tree.GetRootKey())) <= 1);
   }
+  avl_tree.MakeDotFile("tree_100_values");
 }
 
 void InsertNodes(SelfBalancingBinarySearchTree& avl_tree) {
@@ -84,7 +85,7 @@ TEST(AVLTree, DeleteLeafNode) {
   SelfBalancingBinarySearchTree avl_tree;
   InsertNodes(avl_tree);
 
-  // Удаление узла без детей (листового узла)
+  // Deleting a node without children (leaf node)
   EXPECT_TRUE(avl_tree.Del("A"));
   EXPECT_FALSE(avl_tree.Exists("A"));
   EXPECT_TRUE(std::abs(avl_tree.GetBalance(avl_tree.GetRootKey())) <= 1);
@@ -94,7 +95,7 @@ TEST(AVLTree, DeleteNodeWithOneChild) {
   SelfBalancingBinarySearchTree avl_tree;
   InsertNodes(avl_tree);
 
-  // Удаление узла с одним ребенком
+  // Deleting a node with one child
   EXPECT_TRUE(avl_tree.Del("D"));
   EXPECT_FALSE(avl_tree.Exists("D"));
   EXPECT_TRUE(avl_tree.Exists("C"));
@@ -106,7 +107,7 @@ TEST(AVLTree, DeleteNodeWithTwoChildren) {
   SelfBalancingBinarySearchTree avl_tree;
   InsertNodes(avl_tree);
 
-  // Удаление узла с двумя детьми
+  // Deleting a node with two children
   EXPECT_TRUE(avl_tree.Del("B"));
   EXPECT_FALSE(avl_tree.Exists("B"));
   EXPECT_TRUE(avl_tree.Exists("A"));
@@ -119,7 +120,8 @@ TEST(AVLTree, DeleteNodeWithTwoChildren) {
 TEST(AVLTree, DeleteRootWithOneChild) {
   SelfBalancingBinarySearchTree avl_tree;
   EXPECT_TRUE(avl_tree.Set("A", val));
-  // Удаление корневого узла с одним ребенком
+  EXPECT_TRUE(avl_tree.Set("Z", val));
+  // Deleting root with one child
   EXPECT_TRUE(avl_tree.Del("A"));
   EXPECT_FALSE(avl_tree.Exists("A"));
 }
@@ -128,7 +130,7 @@ TEST(AVLTree, DeleteRootWithTwoChildren) {
   SelfBalancingBinarySearchTree avl_tree;
   InsertNodes(avl_tree);
 
-  // Удаление корневого узла с двумя детьми
+  // Deleting root with two children
   EXPECT_TRUE(avl_tree.Del("F"));
   EXPECT_FALSE(avl_tree.Exists("F"));
   EXPECT_TRUE(avl_tree.Exists("G"));
@@ -146,7 +148,7 @@ TEST(AVLTree, DeleteNonexistentNode) {
   SelfBalancingBinarySearchTree avl_tree;
   InsertNodes(avl_tree);
 
-  // Попытка удалить несуществующий узел
+  // Try deleting a non-existent node
   EXPECT_FALSE(avl_tree.Del("Z"));
   EXPECT_FALSE(avl_tree.Exists("Z"));
   EXPECT_TRUE(std::abs(avl_tree.GetBalance(avl_tree.GetRootKey())) <= 1);
@@ -162,8 +164,8 @@ TEST(AVLTree, DeleteLoop) {
     EXPECT_TRUE(avl_tree.Del(std::to_string(i)));
     EXPECT_TRUE(std::abs(avl_tree.GetBalance(avl_tree.GetRootKey())) <= 1);
   }
-  avl_tree.MakeDotFile("test");
-  // Попытка удалить несуществующий узел
+  avl_tree.MakeDotFile("tree_with_delet_node");
+  // Try deleting a non-existent node
   EXPECT_FALSE(avl_tree.Del("Z"));
   EXPECT_FALSE(avl_tree.Exists("Z"));
   EXPECT_TRUE(std::abs(avl_tree.GetBalance(avl_tree.GetRootKey())) <= 1);
@@ -172,9 +174,9 @@ TEST(AVLTree, DeleteLoop) {
 TEST(AVLTree, GetValue) {
   SelfBalancingBinarySearchTree avl_tree;
   InsertNodes(avl_tree);
-  EXPECT_TRUE(avl_tree.Get("A") ==
+  EXPECT_TRUE(avl_tree.Get("A").value() ==
               Value("Pupkin", "Vasya", "1992", "Moskow", "23"));
-  EXPECT_FALSE(avl_tree.Get("A") ==
+  EXPECT_FALSE(avl_tree.Get("A").value() ==
                Value("Pupkin", "Petr", "2000", "Nsk", "23"));
 }
 
@@ -193,7 +195,7 @@ TEST(AVLTree, TestShowAll) {
   SelfBalancingBinarySearchTree avl_tree;
 
   Value value1("Ivanov", "Ivan", "2000", "Moscow", "55");
-  Value value2("Petrov", "Petr", "1990", "St. Petersburg", "100");
+  Value value2("Petrov", "Petr", "1990", "St.Petersburg", "100");
   Value value3("Sidorov", "Sergei", "1980", "Novosibirsk", "50");
   Value value4("Vasilev", "Vasiliy", "2002", "Moscow", "150");
 
@@ -203,6 +205,67 @@ TEST(AVLTree, TestShowAll) {
   EXPECT_TRUE(avl_tree.Set("key4", value4));
   EXPECT_EQ(avl_tree.ShowAll(),
             std::vector<Value>({value1, value2, value3, value4}));
+}
+
+TEST(AVLTree, UpdateTest) {
+  SelfBalancingBinarySearchTree avl_tree;
+  Value value1("Ivanov", "Ivan", "2000", "Moscow", "55");
+  Value value2("Petrov", "Petr", "1990", "St.Petersburg", "100");
+  Value value3("Sidorov", "Sergei", "1980", "Novosibirsk", "50");
+  Value value4("Vasilev", "Vasiliy", "2002", "Moscow", "150");
+
+  EXPECT_TRUE(avl_tree.Set("key1", value1));
+  EXPECT_TRUE(avl_tree.Set("key2", value2));
+  EXPECT_TRUE(avl_tree.Set("key3", value3));
+  EXPECT_TRUE(avl_tree.Set("key4", value4));
+
+  EXPECT_TRUE(avl_tree.Update("key1", "Pupkin Vasya 1992 Moskow 23"));
+
+  EXPECT_TRUE(avl_tree.Update("key2", "Panov Sava - Nsk -"));
+
+  EXPECT_TRUE(avl_tree.Get("key1").value() ==
+              Value("Pupkin", "Vasya", "1992", "Moskow", "23"));
+
+  EXPECT_TRUE(avl_tree.Get("key2").value() ==
+              Value("Panov", "Sava", "1990", "Nsk", "100"));
+}
+
+TEST(AVLTree, UpdateTest2) {
+  SelfBalancingBinarySearchTree avl_tree;
+
+  Value value1("Ivanov", "Ivan", "2000", "Moscow", "55");
+  Value value2("Petrov", "Petr", "1990", "St. Petersburg", "100");
+  Value value3("Sidorov", "Sergei", "1980", "Novosibirsk", "50");
+
+  EXPECT_TRUE(avl_tree.Set("key1", value1));
+  EXPECT_TRUE(avl_tree.Set("key2", value2));
+  EXPECT_TRUE(avl_tree.Set("key3", value3));
+  EXPECT_TRUE(avl_tree.Update("key1", "- - 1999 Msk 90"));
+  EXPECT_TRUE(avl_tree.Update("key2", "- - - Msk -"));
+  EXPECT_TRUE(avl_tree.Update("key3", "Ivanov Ivan 2000 Moscow 55"));
+  EXPECT_TRUE(avl_tree.Get("key1").value().Match("Ivanov Ivan 1999 Msk 90"));
+  EXPECT_TRUE(avl_tree.Get("key2").value().Match("Petrov Petr 1990 Msk 100"));
+  EXPECT_TRUE(avl_tree.Get("key3").value().Match("Ivanov Ivan 2000 Moscow 55"));
+  EXPECT_FALSE(avl_tree.Update("unknown_key", "- - - - -"));
+}
+
+TEST(AVLTree, RenameTest) {
+  SelfBalancingBinarySearchTree avl_tree;
+  Value value1("Ivanov", "Ivan", "2000", "Moscow", "55");
+  Value value2("Petrov", "Petr", "1990", "St. Petersburg", "100");
+  Value value3("Sidorov", "Sergei", "1980", "Novosibirsk", "50");
+
+  EXPECT_TRUE(avl_tree.Set("key1", value1));
+  EXPECT_TRUE(avl_tree.Set("key2", value2));
+  EXPECT_TRUE(avl_tree.Set("key3", value3));
+
+  EXPECT_TRUE(avl_tree.Rename("key1", "key99"));
+  EXPECT_TRUE(avl_tree.Get("key99").value() == value1);
+
+  EXPECT_TRUE(avl_tree.Rename("key3", "asdads"));
+  EXPECT_TRUE(avl_tree.Get("asdads").value() == value3);
+
+  EXPECT_FALSE(avl_tree.Rename("unknown_key", "unknown_key"));
 }
 
 int main(int argc, char** argv) {
