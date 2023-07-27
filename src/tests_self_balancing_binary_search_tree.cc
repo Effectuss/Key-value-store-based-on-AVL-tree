@@ -1,24 +1,44 @@
 #include <gtest/gtest.h>
 
+#include <chrono>
 #include <cmath>
 
 #include "self_balancing_binary_search_tree.h"
 
 Value val("Pupkin", "Vasya", "1992", "Moskow", "23");
 
-TEST(AVLTree, Set1) {
+std::vector<std::string> vec_check_val = {
+    "Vasiliev Ivan 2001 Rostov 55",       "Ivanov Vasiliy 2000 Moscow 55",
+    "Petrov Petr 1990 Tver 100",          "Ivanov Ivan 2000 Moscow 55",
+    "Sidorov Sergei 1980 Novosibirsk 50", "Vasilev Vasiliy 2000 Moscow 150",
+    "Urantaev Dima 1993 Nsk 1234",        "Panov Savelii 1998 Barnaul 1",
+    "Pechenin Maxim 1990 Ekb 999"};
+
+void InsertNodes(SelfBalancingBinarySearchTree& avl_tree) {
+  avl_tree.Set("F", val);
+  avl_tree.Set("B", val);
+  avl_tree.Set("G", val);
+  avl_tree.Set("A", val);
+  avl_tree.Set("D", val);
+  avl_tree.Set("I", val);
+  avl_tree.Set("C", val);
+  avl_tree.Set("E", val);
+  avl_tree.Set("H", val);
+}
+
+TEST(AVLTreeTest, Set1) {
   SelfBalancingBinarySearchTree avl_tree;
   EXPECT_TRUE(avl_tree.Set("10", val));
 }
 
-TEST(AVLTree, Set2) {
+TEST(AVLTreeTest, Set2) {
   SelfBalancingBinarySearchTree avl_tree;
   EXPECT_TRUE(avl_tree.Set("10", val));
   EXPECT_TRUE(avl_tree.Set("5", val));
   EXPECT_TRUE(std::abs(avl_tree.GetBalance(avl_tree.GetRootKey())) <= 1);
 }
 
-TEST(AVLTree, SetFourElements) {
+TEST(AVLTreeTest, SetFourElements) {
   SelfBalancingBinarySearchTree avl_tree;
   EXPECT_TRUE(avl_tree.Set("g", val));
   EXPECT_TRUE(avl_tree.Set("d", val));
@@ -27,7 +47,7 @@ TEST(AVLTree, SetFourElements) {
   EXPECT_TRUE(std::abs(avl_tree.GetBalance(avl_tree.GetRootKey())) <= 1);
 }
 
-TEST(AVLTree, CheckBalanceAfterSet1) {
+TEST(AVLTreeTest, CheckBalanceAfterSet1) {
   SelfBalancingBinarySearchTree avl_tree;
   EXPECT_TRUE(avl_tree.Set("g", val));
   EXPECT_TRUE(avl_tree.Set("d", val));
@@ -41,7 +61,7 @@ TEST(AVLTree, CheckBalanceAfterSet1) {
   EXPECT_TRUE(avl_tree.Exists("g"));
 }
 
-TEST(AVLTree, CheckBalanceAfterSet2) {
+TEST(AVLTreeTest, CheckBalanceAfterSet2) {
   SelfBalancingBinarySearchTree avl_tree;
   EXPECT_TRUE(avl_tree.Set("g", val));
   EXPECT_FALSE(avl_tree.Set("g", val));
@@ -60,7 +80,7 @@ TEST(AVLTree, CheckBalanceAfterSet2) {
   EXPECT_FALSE(avl_tree.Exists("k"));
 }
 
-TEST(AVLTree, LoopSet) {
+TEST(AVLTreeTest, LoopSet) {
   SelfBalancingBinarySearchTree avl_tree;
   for (int i = 0; i < 100; ++i) {
     EXPECT_TRUE(avl_tree.Set(std::to_string(i), val));
@@ -69,19 +89,7 @@ TEST(AVLTree, LoopSet) {
   avl_tree.MakeDotFile("tree_100_values");
 }
 
-void InsertNodes(SelfBalancingBinarySearchTree& avl_tree) {
-  avl_tree.Set("F", val);
-  avl_tree.Set("B", val);
-  avl_tree.Set("G", val);
-  avl_tree.Set("A", val);
-  avl_tree.Set("D", val);
-  avl_tree.Set("I", val);
-  avl_tree.Set("C", val);
-  avl_tree.Set("E", val);
-  avl_tree.Set("H", val);
-}
-
-TEST(AVLTree, DeleteLeafNode) {
+TEST(AVLTreeTest, DeleteLeafNode) {
   SelfBalancingBinarySearchTree avl_tree;
   InsertNodes(avl_tree);
 
@@ -91,7 +99,7 @@ TEST(AVLTree, DeleteLeafNode) {
   EXPECT_TRUE(std::abs(avl_tree.GetBalance(avl_tree.GetRootKey())) <= 1);
 }
 
-TEST(AVLTree, DeleteNodeWithOneChild) {
+TEST(AVLTreeTest, DeleteNodeWithOneChild) {
   SelfBalancingBinarySearchTree avl_tree;
   InsertNodes(avl_tree);
 
@@ -103,7 +111,7 @@ TEST(AVLTree, DeleteNodeWithOneChild) {
   EXPECT_TRUE(std::abs(avl_tree.GetBalance(avl_tree.GetRootKey())) <= 1);
 }
 
-TEST(AVLTree, DeleteNodeWithTwoChildren) {
+TEST(AVLTreeTest, DeleteNodeWithTwoChildren) {
   SelfBalancingBinarySearchTree avl_tree;
   InsertNodes(avl_tree);
 
@@ -117,7 +125,7 @@ TEST(AVLTree, DeleteNodeWithTwoChildren) {
   EXPECT_TRUE(std::abs(avl_tree.GetBalance(avl_tree.GetRootKey())) <= 1);
 }
 
-TEST(AVLTree, DeleteRootWithOneChild) {
+TEST(AVLTreeTest, DeleteRootWithOneChild) {
   SelfBalancingBinarySearchTree avl_tree;
   EXPECT_TRUE(avl_tree.Set("A", val));
   EXPECT_TRUE(avl_tree.Set("Z", val));
@@ -126,7 +134,7 @@ TEST(AVLTree, DeleteRootWithOneChild) {
   EXPECT_FALSE(avl_tree.Exists("A"));
 }
 
-TEST(AVLTree, DeleteRootWithTwoChildren) {
+TEST(AVLTreeTest, DeleteRootWithTwoChildren) {
   SelfBalancingBinarySearchTree avl_tree;
   InsertNodes(avl_tree);
 
@@ -144,7 +152,7 @@ TEST(AVLTree, DeleteRootWithTwoChildren) {
   EXPECT_TRUE(std::abs(avl_tree.GetBalance(avl_tree.GetRootKey())) <= 1);
 }
 
-TEST(AVLTree, DeleteNonexistentNode) {
+TEST(AVLTreeTest, DeleteNonexistentNode) {
   SelfBalancingBinarySearchTree avl_tree;
   InsertNodes(avl_tree);
 
@@ -154,7 +162,7 @@ TEST(AVLTree, DeleteNonexistentNode) {
   EXPECT_TRUE(std::abs(avl_tree.GetBalance(avl_tree.GetRootKey())) <= 1);
 }
 
-TEST(AVLTree, DeleteLoop) {
+TEST(AVLTreeTest, DeleteLoop) {
   SelfBalancingBinarySearchTree avl_tree;
   for (int i = 0; i < 100; ++i) {
     EXPECT_TRUE(avl_tree.Set(std::to_string(i), val));
@@ -171,7 +179,7 @@ TEST(AVLTree, DeleteLoop) {
   EXPECT_TRUE(std::abs(avl_tree.GetBalance(avl_tree.GetRootKey())) <= 1);
 }
 
-TEST(AVLTree, GetValue) {
+TEST(AVLTreeTest, GetValue) {
   SelfBalancingBinarySearchTree avl_tree;
   InsertNodes(avl_tree);
   EXPECT_TRUE(avl_tree.Get("A").value() ==
@@ -180,9 +188,9 @@ TEST(AVLTree, GetValue) {
                Value("Pupkin", "Petr", "2000", "Nsk", "23"));
 }
 
-TEST(AVLTree, TestKeys) {
+TEST(AVLTreeTest, TestKeys) {
   SelfBalancingBinarySearchTree avl_tree;
-  auto check_size = avl_tree.Upload("test.dat");
+  auto check_size = avl_tree.Upload("data_for_test.dat");
   EXPECT_EQ(check_size, 9);
   auto vec_key = avl_tree.Keys();
   EXPECT_EQ(vec_key.size(), 9);
@@ -191,7 +199,7 @@ TEST(AVLTree, TestKeys) {
   }
 }
 
-TEST(AVLTree, TestShowAll) {
+TEST(AVLTreeTest, TestShowAll) {
   SelfBalancingBinarySearchTree avl_tree;
 
   Value value1("Ivanov", "Ivan", "2000", "Moscow", "55");
@@ -207,7 +215,7 @@ TEST(AVLTree, TestShowAll) {
             std::vector<Value>({value1, value2, value3, value4}));
 }
 
-TEST(AVLTree, UpdateTest) {
+TEST(AVLTreeTest, UpdateTest) {
   SelfBalancingBinarySearchTree avl_tree;
   Value value1("Ivanov", "Ivan", "2000", "Moscow", "55");
   Value value2("Petrov", "Petr", "1990", "St.Petersburg", "100");
@@ -230,7 +238,7 @@ TEST(AVLTree, UpdateTest) {
               Value("Panov", "Sava", "1990", "Nsk", "100"));
 }
 
-TEST(AVLTree, UpdateTest2) {
+TEST(AVLTreeTest, UpdateTest2) {
   SelfBalancingBinarySearchTree avl_tree;
 
   Value value1("Ivanov", "Ivan", "2000", "Moscow", "55");
@@ -249,7 +257,7 @@ TEST(AVLTree, UpdateTest2) {
   EXPECT_FALSE(avl_tree.Update("unknown_key", "- - - - -"));
 }
 
-TEST(AVLTree, RenameTest) {
+TEST(AVLTreeTest, RenameTest) {
   SelfBalancingBinarySearchTree avl_tree;
   Value value1("Ivanov", "Ivan", "2000", "Moscow", "55");
   Value value2("Petrov", "Petr", "1990", "St. Petersburg", "100");
@@ -266,6 +274,56 @@ TEST(AVLTree, RenameTest) {
   EXPECT_TRUE(avl_tree.Get("asdads").value() == value3);
 
   EXPECT_FALSE(avl_tree.Rename("unknown_key", "unknown_key"));
+}
+
+TEST(AVLTreeTest, ExportTest) {
+  SelfBalancingBinarySearchTree avl_tree;
+  auto lines_upload = avl_tree.Upload("data_for_test.dat");
+  auto lines_export = avl_tree.Export("check.dat");
+
+  auto vec_key = avl_tree.Keys();
+  auto vec_value = avl_tree.ShowAll();
+
+  std::vector<AbstractStore::Key> vec_check_key = {"1", "2", "3", "4", "5",
+                                                   "6", "7", "8", "9"};
+
+  for (auto i = 0; i < vec_value.size(); ++i) {
+    EXPECT_EQ(vec_check_val[i], vec_value[i].ToString());
+    EXPECT_EQ(vec_check_key[i], vec_key[i]);
+  }
+}
+
+TEST(AVLTreeTest, FindTest) {
+  SelfBalancingBinarySearchTree avl_tree;
+  avl_tree.Upload("data_for_test.dat");
+  auto vec_key = avl_tree.Keys();
+  auto find_key = avl_tree.Find("Ivanov - 2000 - 55");
+  EXPECT_EQ(find_key[0], vec_key[1]);
+  EXPECT_EQ(find_key[1], vec_key[3]);
+}
+
+TEST(AVLTreeTest, FindTest2) {
+  SelfBalancingBinarySearchTree avl_tree;
+
+  Value value1("Ivanov", "Ivan", "2000", "Moscow", "55");
+  Value value2("Petrov", "Petr", "1990", "St. Petersburg", "100");
+  Value value3("Sidorov", "Sergei", "1980", "Novosibirsk", "50");
+  Value value4("Vasilev", "Vasiliy", "2002", "Moscow", "150");
+  Value value5("Ivanov", "Petr", "2000", "Moscow", "55");
+
+  avl_tree.Set("key1", value1);
+  avl_tree.Set("key2", value2);
+  avl_tree.Set("key3", value1);
+  avl_tree.Set("key4", value3);
+  avl_tree.Set("key5", value4);
+  avl_tree.Set("key6", value1);
+  avl_tree.Set("key7", value5);
+  EXPECT_EQ(avl_tree.Find("Ivanov - 2000 Moscow 55"),
+            std::vector<AbstractStore::Key>({"key1", "key3", "key6", "key7"}));
+}
+
+TEST(AVLTreeTest, TTLTest) {
+  
 }
 
 int main(int argc, char** argv) {

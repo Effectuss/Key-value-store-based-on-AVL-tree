@@ -1,8 +1,0 @@
-digraph BST {
-    node [shape=circle, style=filled, fillcolor=green];
-    key1;
-    key1 -> asdads;
-    asdads;
-    key1 -> key99;
-    key99;
-}

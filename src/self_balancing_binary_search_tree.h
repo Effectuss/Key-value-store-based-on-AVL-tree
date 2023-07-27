@@ -20,12 +20,10 @@ class SelfBalancingBinarySearchTree : public AbstractStore {
   std::vector<Value> ShowAll() const override;
   bool Update(const Key& key, const std::string& new_value) override;
   bool Rename(const Key& old_key, const Key& new_key) override;
-  
   std::size_t Upload(const std::string& file_name) override;
   std::size_t Export(const std::string& file_name) const override;
-  std::optional<std::size_t> TTL(const Key& key) const override;
   std::vector<Key> Find(const std::string& value) const override;
-
+  std::optional<std::size_t> TTL(const Key& key) const override;
   void MakeDotFile(const std::string& file_name) const;
   int GetBalance(const Key& key) const;
   const Key GetRootKey() const;
