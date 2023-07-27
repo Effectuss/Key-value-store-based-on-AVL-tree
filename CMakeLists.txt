@@ -8,6 +8,7 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 include_directories(
     ${CMAKE_SOURCE_DIR}/avl_tree
     ${CMAKE_SOURCE_DIR}/interface
+    ${CMAKE_SOURCE_DIR}/tests
 )
 
 set(HEADERS
@@ -28,6 +29,8 @@ add_executable(
     ${SOURCES}
     ${CMAKE_SOURCE_DIR}/main.cc
 )
+
+add_subdirectory(tests)
 
 target_compile_options(
     ${PROJECT_NAME}

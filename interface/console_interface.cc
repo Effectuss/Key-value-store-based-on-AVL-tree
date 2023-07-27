@@ -265,7 +265,7 @@ void Console::Upload(const std::vector<std::string>& tokens) {
       std::cout << e.what() << "\n";
     }
   } else {
-    std::cout << "> ERROR: invalid TTL command\n";
+    std::cout << "> ERROR: invalid UPLOAD command\n";
   }
 }
 
@@ -280,7 +280,7 @@ void Console::Export(const std::vector<std::string>& tokens) {
       std::cout << e.what() << "\n";
     }
   } else {
-    std::cout << "> ERROR: invalid TTL command\n";
+    std::cout << "> ERROR: invalid EXPORT command\n";
   }
 }
 

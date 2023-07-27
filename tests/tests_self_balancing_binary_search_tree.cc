@@ -190,11 +190,11 @@ TEST(AVLTreeTest, GetValue) {
 
 TEST(AVLTreeTest, TestKeys) {
   SelfBalancingBinarySearchTree avl_tree;
-  auto check_size = avl_tree.Upload("data_for_test.dat");
+  auto check_size = avl_tree.Upload("../../resources/data_for_test.dat");
   EXPECT_EQ(check_size, 9);
   auto vec_key = avl_tree.Keys();
   EXPECT_EQ(vec_key.size(), 9);
-  for (int i = 1; i <= vec_key.size(); ++i) {
+  for (auto i = 1u; i <= vec_key.size(); ++i) {
     EXPECT_EQ(std::to_string(i), vec_key[i - 1]);
   }
 }
@@ -278,8 +278,10 @@ TEST(AVLTreeTest, RenameTest) {
 
 TEST(AVLTreeTest, ExportTest) {
   SelfBalancingBinarySearchTree avl_tree;
-  auto lines_upload = avl_tree.Upload("data_for_test.dat");
+  auto lines_upload = avl_tree.Upload("../../resources/data_for_test.dat");
   auto lines_export = avl_tree.Export("check.dat");
+
+  EXPECT_EQ(lines_upload, lines_export);
 
   auto vec_key = avl_tree.Keys();
   auto vec_value = avl_tree.ShowAll();
@@ -287,7 +289,7 @@ TEST(AVLTreeTest, ExportTest) {
   std::vector<AbstractStore::Key> vec_check_key = {"1", "2", "3", "4", "5",
                                                    "6", "7", "8", "9"};
 
-  for (auto i = 0; i < vec_value.size(); ++i) {
+  for (auto i = 0u; i < vec_value.size(); ++i) {
     EXPECT_EQ(vec_check_val[i], vec_value[i].ToString());
     EXPECT_EQ(vec_check_key[i], vec_key[i]);
   }
@@ -295,7 +297,7 @@ TEST(AVLTreeTest, ExportTest) {
 
 TEST(AVLTreeTest, FindTest) {
   SelfBalancingBinarySearchTree avl_tree;
-  avl_tree.Upload("data_for_test.dat");
+  avl_tree.Upload("../../resources/data_for_test.dat");
   auto vec_key = avl_tree.Keys();
   auto find_key = avl_tree.Find("Ivanov - 2000 - 55");
   EXPECT_EQ(find_key[0], vec_key[1]);
@@ -322,13 +324,9 @@ TEST(AVLTreeTest, FindTest2) {
             std::vector<AbstractStore::Key>({"key1", "key3", "key6", "key7"}));
 }
 
-TEST(AVLTreeTest, TTLTestExist) {
-  
-}
+TEST(AVLTreeTest, TTLTestExist) {}
 
-TEST(AVLTreeTest, TTLTestEnd) {
-  
-}
+TEST(AVLTreeTest, TTLTestEnd) {}
 
 int main(int argc, char** argv) {
   ::testing::InitGoogleTest(&argc, argv);
