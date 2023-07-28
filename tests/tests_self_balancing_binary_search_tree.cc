@@ -2,6 +2,7 @@
 
 #include <chrono>
 #include <cmath>
+#include <thread>
 
 #include "self_balancing_binary_search_tree.h"
 
@@ -339,7 +340,22 @@ TEST(AVLTreeTest, TTLTestExist) {
   EXPECT_EQ(avl_tree.TTL("key3"), std::nullopt);
 }
 
-TEST(AVLTreeTest, TTLTestEnd) {}
+TEST(AVLTreeTest, TTLTestEnd) {
+  SelfBalancingBinarySearchTree avl_tree;
+
+  Value value1("Ivanov", "Ivan", "2000", "Moscow", "55", "1");
+  Value value2("Petrov", "Petr", "1990", "St. Petersburg", "100", "2");
+  Value value3("Sidorov", "Sergei", "1980", "Novosibirsk", "3", "4");
+
+  EXPECT_TRUE(avl_tree.Set("key1", value1));
+  EXPECT_TRUE(avl_tree.Set("key2", value2));
+  EXPECT_TRUE(avl_tree.Set("key3", value3));
+  std::this_thread::sleep_for(std::chrono::seconds(5));
+  avl_tree.DeleteExpiredElements();
+  EXPECT_FALSE(avl_tree.Exists("key1"));
+  EXPECT_FALSE(avl_tree.Exists("key2"));
+  EXPECT_FALSE(avl_tree.Exists("key3"));
+}
 
 int main(int argc, char** argv) {
   ::testing::InitGoogleTest(&argc, argv);
