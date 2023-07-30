@@ -220,3 +220,8 @@ After the `OK` the number of strings exported from the file is displayed.
 
 ## Demonstration of work
 
+![Demonstration](docs/Demonstration.gif)
+
+## License
+
+This project is licensed under the [MIT License](LICENSE). See the LICENSE file for more details.
