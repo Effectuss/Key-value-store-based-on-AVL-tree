@@ -9,7 +9,7 @@ build:
 run: build
 	cd build; ./KeyValueStoreAVLTree
 
-test: build
+tests: build
 	cmake --build build --target tests_binary_tree
 	cd build/tests; ./tests_binary_tree
 

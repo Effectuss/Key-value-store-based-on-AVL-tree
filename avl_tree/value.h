@@ -42,7 +42,7 @@ class Value {
     if (birth_year != "-") birth_year_ = ValidateNumber(birth_year, kDate);
     if (city != "-") city_ = city;
     if (coins != "-") coins_ = ValidateNumber(coins, TypeValidation::kCoin);
-    if (ttl.has_value() and ttl.value() != "-")
+    if (ttl.has_value() && ttl.value() != "-")
       ttl_ = ValidateNumber(*ttl, TypeValidation::kTTL);
   }
 
@@ -93,18 +93,18 @@ class Value {
     std::istringstream ss(value);
     auto [last_name, first_name, birth_year, city, coins, ttl] =
         ParseValueFields(ss);
-    return (last_name == "-" or last_name == last_name_) and
-           (first_name == "-" or first_name == first_name_) and
-           (birth_year == "-" or
-            ValidateNumber(birth_year, kDate) == birth_year_) and
-           (city == "-" or city == city_) and
-           (coins == "-" or ValidateNumber(coins, kCoin) == coins_);
+    return (last_name == "-" || last_name == last_name_) &&
+           (first_name == "-" || first_name == first_name_) &&
+           (birth_year == "-" ||
+            ValidateNumber(birth_year, kDate) == birth_year_) &&
+           (city == "-" || city == city_) &&
+           (coins == "-" || ValidateNumber(coins, kCoin) == coins_);
   }
 
   bool operator==(const Value &other) const {
-    return (last_name_ == other.last_name_) and
-           (first_name_ == other.first_name_) and
-           (birth_year_ == other.birth_year_) and (city_ == other.city_) and
+    return (last_name_ == other.last_name_) &&
+           (first_name_ == other.first_name_) &&
+           (birth_year_ == other.birth_year_) && (city_ == other.city_) &&
            (coins_ == other.coins_);
   }
 
@@ -120,20 +120,21 @@ class Value {
                                     const TypeValidation &type) {
     try {
       auto value = std::stoi(input);
-      if (type == TypeValidation::kDate and
+      if (type == TypeValidation::kDate &&
           (std::to_string(value).length() != 4 || value < 0)) {
-        throw std::invalid_argument(
-            "ERROR: invalid input format for date, value is " + input);
-      } else if (type == TypeValidation::kCoin and value < 0) {
-        throw std::invalid_argument(
-            "ERROR: invalid input format for coins, value is " + input);
-      } else if (type == TypeValidation::kTTL and value < 0) {
-        throw std::invalid_argument(
-            "ERROR: invalid input format for TTL, value is " + input);
+        throw input;
+      } else if (type == TypeValidation::kCoin && value < 0) {
+        throw input;
+      } else if (type == TypeValidation::kTTL && value < 0) {
+        throw input;
       }
       return std::to_string(value);
     } catch (const std::exception &e) {
-      throw std::invalid_argument(e.what());
+      throw std::invalid_argument("ERROR: unable to cast value \"" + input +
+                                  "\" to type int");
+    } catch (...) {
+      throw std::invalid_argument("ERROR: invalid input format for value \"" +
+                                  input + "\"");
     }
   }
 
